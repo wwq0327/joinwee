@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row my-top-header">
+	<div class="col-lg-9">
+		{% block blog_main %}{% endblock %}
+	</div><!-- end 主体内容 -->
+
+	<div class="col-lg-3">
+		{% block blog_right %}{% endblock %}
+	</div>
+</div>
+<p></p>
+
+{% endblock %}
+
+
+

@@ -1,0 +1,100 @@
+{% extends 'userena/base_userena.html' %}
+{% load i18n %}
+{% load url from future %}
+{% load markup %}
+{% load thumbnail %}
+{% load hitcount_tags %}
+
+{% block title %}微课管理{% endblock %}
+
+{% block content %}
+<div class="row my-top-header">
+  {% block content_title %}
+  <h2 class="page-header-1">{{ profile.get_nick_name }} 微课管理</h2>
+  {% endblock %}
+
+  <div class="col-xs-8 col-lg-8">
+  {% if lessons %}
+    {% for lesson  in lessons  %}
+ 
+    <div class="col-xs-10 col-lg-10">
+      <div class="media pro-list">
+        <a class="pull-left" href="{{ lesson.get_absolute_url }}">
+          <img src="{{ lesson.image|thumbnail_url:'com_header'}}">
+        </a>
+        <div class="media-body">
+          <h3 class="media-heading"><a href="{{ lesson.get_absolute_url }}" title="{{ lesson.name }}">{{ lesson.name|slice:":30" }}</a></h3>
+          <div class="mn-info"><small>发布时间： {{ lesson.created|date:"Y/m/d" }}  最后一次修改： {{ lesson.updated|date:"Y/m/d" }}</small></div>
+          <div class="lesson-content">
+            <p><small>{{ lesson.desc|slice:":120" }}</small></p>
+          </div>
+
+        </div>
+      </div> <!-- end media -->
+    </div>
+
+    <div class="col-xs-2 col-lg-2">
+      <p class="text-center">浏览数量</p>
+      <p class="text-center">{% get_hit_count for lesson %}</p>
+
+      <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+        编辑微课<span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="{% url 'lesson_edit' lesson.pk %}">修改内容</a></li>
+          <li><a href="{% url 'lesson_info' lesson.pk %}">修改简介</a></li>
+	  <li><a href="{% url 'lesson_unpublish' lesson.pk %}">取消发布</a></li>
+          <li><a href="{% url 'lesson_delete' lesson.pk %}" class="rm">删除本课</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    {% endfor %}
+    {% else %}
+    还没发起过微课
+    {% endif %}
+  </div>
+
+  <div class="col-xs-4 col-lg-4">
+    <h4 class="page-header-1"><strong class="t_c">微课草稿箱</strong></h4>
+    {% if lessons %}
+    <ul class="list-unstyled">
+      {% for lesson in draft_lessons %}
+
+      <li class="pro-list" id="draft-list">
+	  <div class="pull-right">
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown">
+        编辑草稿<span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="{% url 'lesson_edit' lesson.pk %}">修改内容</a></li>
+          <li><a href="{% url 'lesson_info' lesson.pk %}">修改简介</a></li>
+          <li><a href="{% url 'lesson_delete' lesson.pk %}" class="rm">删除本课</a></li>
+        </ul>
+      </div>
+	  </div>
+	  <a href="{% url 'lesson_draft' lesson.id %}">{{ lesson.name }}</a><br />
+	  <small>
+	    创建于：{{ lesson.created|date:"Y/m/d"}} 
+	  </small>
+      </li>
+
+      {% endfor %}
+    </ul>
+    {% else %}
+    你暂无存为草稿状态的微课～～
+    {% endif %}
+  </div>
+
+</div><!-- end row -->
+
+{% endblock %}
+
+{% block script %}
+
+
+{% endblock %}

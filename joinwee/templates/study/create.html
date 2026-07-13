@@ -1,0 +1,53 @@
+{% extends "study/sub_base.html" %}
+{% load bootstrap3 %}
+
+{% block css %}
+<link href="{{ MEDIA_URL }}css/bootstrap-datetimepicker.css" rel="stylesheet" media="screen">
+{% endblock %}
+
+{% block title %} {% if is_edit %}编辑研修{% else %}发起一个研修{% endif %}{% endblock %}
+
+{% block study_main %}
+
+<form action="" method="post" class="form-horizontal">
+  <h2 class="page-header-1">{% if is_edit %}编辑你的研修{% else %}发起一个研修{% endif %}</h2>
+  {% csrf_token %}
+  <div style="margin: 0 15px;">
+  {% bootstrap_field form.content show_label=False %}
+    <script src="{{ MEDIA_URL }}epiceditor/js/epiceditor.min.js"></script>
+
+  {% bootstrap_field form.number show_label=False%}
+    
+  {% bootstrap_field form.tags show_label=False%}
+  {% bootstrap_field form.start_time show_label=False %}
+  {% bootstrap_field form.end_time show_label=False %}
+  </div>
+  <button type="submit" class="btn btn-primary pull-right">{% if is_edit %}确定修改{% else %}发布研修{% endif %}</button>
+</form>
+{% endblock study_main %}
+
+{% block script %}
+
+<script type="text/javascript" src="{{ MEDIA_URL }}js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<link href="{{ MEDIA_URL }}epiceditor/base/epiceditor.css" rel="stylesheet">
+<script type="text/javascript">
+ $("#id_start_time").datetimepicker({
+   format: "yyyy-mm-dd hh:ii",
+   autoclose: true,
+   todayHighlight: true,
+   weekStart: 1,
+   pickerPosition: "bottom-right",
+   language: "zh-CN"
+ });
+
+ $("#id_end_time").datetimepicker({
+   format: "yyyy-mm-dd hh:ii",
+   autoclose: true,
+   todayHighlight: true,
+   weekStart: 1,
+   pickerPosition: "bottom-right",
+   language: "zh-CN"
+ });
+</script>
+{% endblock %}

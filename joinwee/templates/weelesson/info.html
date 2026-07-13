@@ -1,0 +1,145 @@
+{% extends "weelesson/sub_edit.html" %}
+
+{% load bootstrap3 %}
+
+{% block title %}{% if is_edit %}编辑微课信息{% else %}发布微课{% endif %}{% endblock %}
+
+{% block ed_main %}
+
+
+
+
+<div class="row">
+  <div class="col-lg-9">
+    <form enctype="multipart/form-data" action="" method="post" class="form-horizontal my-top-header">
+      {% csrf_token %}
+
+      <div class="row">
+	<div class="col-lg-6">
+	  <h4 style="padding-top: 6px;"><a href="{% url 'lesson_edit' lesson.id %}">第一步：编写微课内容</a></h4>
+	</div>
+	<div class="col-lg-6 text-right">
+	  <h4>第二步：编辑微课简介
+	    <button type="submit" class="btn btn-primary btn-sm">保存</button>
+	    <a href="{% url 'weelesson_detail' lesson.id %}" class="draft-pre btn btn-default btn-sm" role="button">预览</a>
+	  </h4>
+	</div>
+      </div>
+
+      <fieldset>
+
+        {{ form.non_field_errors }}
+        {% if form.errors %}
+        <div class="alert alert-warning alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          请将页面中信息填写完整再点击提交
+        </div>
+        {% endif %}
+	<div class="row">
+	  <div class="col-lg-12">
+	    <div class="col-lg-12">
+              {% bootstrap_field form.desc show_label=False  %}
+
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="row">
+	  <div class="col-lg-6">
+	    <div class="col-lg-12">
+              {% bootstrap_field form.image show_label=False  %}
+	    </div>
+	  </div>
+
+	  <div class="col-lg-6">
+            {% bootstrap_field form.level field_class="lesson-level" show_label=False %}
+	  </div>
+	</div>
+
+	<div class="row">
+	  <div class="col-lg-6">
+	    <h4 style="padding-top: 6px;"><a href="{% url 'lesson_edit' lesson.id %}">第一步：编写微课内容</a></h4>
+	  </div>
+	  <div class="col-lg-6 text-right">
+	    <h4>第二步：编辑微课简介
+	      <button type="submit" class="btn btn-primary btn-sm">保存</button>
+	      <a href="{% url 'weelesson_detail' lesson.id %}" class="draft-pre btn btn-default btn-sm" role="button">预览</a>
+	    </h4>
+	  </div>
+	</div>
+
+      </fieldset>
+    </form>
+    
+  </div>
+
+  <div class="col-lg-3">
+
+    <div class="well well-lg">
+      <h5>
+	{% if lesson.is_draft %}
+	<h4>{{ lesson.name }}<small><span class="label label-default">草稿</span></small></h4>
+	{% else %}
+	<h4>{{ lesson.name }}<small><span class="label label-success">已发布</span></small></h4>
+	{% endif %}
+      </h5>
+      <div>
+	<small>
+	  创建于：{{ lesson.created|date:"Y/m/d H:i"}} <br />
+	  最后修改于：{{ lesson.updated|date:"Y/m/d H:i" }}<br />
+	</small>
+      </div>
+      {% if is_edit == False %}
+      <hr>
+      <div>
+	<p><small>如果你已写好了这个微课，请点击下面的按钮发布吧！</small></p>
+	<a href="{% url 'lesson_publish' lesson.id %}" class="btn btn-primary btn-block" role="button" id="ls-publish">发布微课</a>
+      </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+<p></p>
+{% endblock %}
+
+
+{% block script %}
+
+<link href="{{ MEDIA_URL }}css/pagedown.css" type="text/css" media="all" rel="stylesheet" />
+<script type="text/javascript" src="{{ MEDIA_URL }}js/pagedown/Markdown.Converter.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/pagedown/Markdown.Sanitizer.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/pagedown/Markdown.Editor.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/pagedown_init.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/fancybox/jquery.mousewheel-3.0.6.pack.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/fancybox/jquery.fancybox.pack.js"></script>
+<link rel="stylesheet" href="{{ MEDIA_URL }}js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $(".various").fancybox({
+        maxWidth        : 1024,
+        maxHeight       : 640,
+        autoSize        : false,
+        fitToView       : false,
+        width           : '100%',
+        height          : '100%',
+        closeClick      : false,
+        openEffect      : 'none',
+        closeEffect     : 'none',
+
+    });
+});
+
+(function () {
+    var converter = new Markdown.Converter();
+    var pre = function(){alert("H");}
+    var editor = new Markdown.Editor(converter, "-second", { handler: pre}, 'zh-CN');
+    editor.run();
+})();
+
+
+</script>
+
+{% endblock %}

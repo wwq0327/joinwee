@@ -1,0 +1,14 @@
+{% load thumbnail %}
+
+{% for meet in meets %}
+  <div class="col-sm-6 col-md-3 sm-6-bottom">
+    <div class="thumbnail">
+      <img src="{{ meet.image |thumbnail_url:'lesson' }}" alt="">
+      <div class="caption">
+        <h5 class="lesson-title"><a href="{{ meet.get_absolute_url }}" title="{{ meet.name|safe }}">{{ meet.name|striptags|safe }}</a></h5>
+        <p class="lesson-con">{{ meet.summary|striptags|slice:":80"|safe}}</p>
+        <p class="lesson-fun"><small>由<a href="{% url 'userena_profile_detail' meet.creater.username %}">{{ meet.creater.profile.get_nick_name }}</a>创建于{{ meet.created|date:"Y-m-d" }}</small></p>
+      </div>
+    </div>
+  </div>
+{% endfor %}

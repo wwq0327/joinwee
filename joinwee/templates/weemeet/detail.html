@@ -1,0 +1,202 @@
+{% extends "weemeet/sub_base.html" %}
+{% load thumbnail %}
+{% load markup %}
+{% load comments %}
+{% load hitcount_tags %}
+
+{% block title %}{{ meet.lesson.name }}{% endblock %}
+
+{% block wee_header %}
+
+<div class="meet-header">
+  <div class="container">
+    《
+    <a href="{{ meet.lesson.get_absolute_url }}">{{ meet.lesson.name }}</a>
+    》的微聚
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block meet_main %}
+
+
+{# <div class="tab-content"> #}
+  <!-- meet head -->
+
+  <div class="tab-pane fade in active" id="home">
+    <div>
+      <h2>
+	<strong>{{ meet.start_time|date:"Y/m/d" }} ~ {{ meet.end_time|date:"Y/m/d"}} @ {{ meet.city }}
+	  <span class="badge">{{ meet.get_time }}</span>
+	</strong>
+
+      </h2>
+      <small>微聚地点：{{ meet.address }}</small>
+      <div class="media">
+        {% if fav.user.profile.mugshot %}
+          <a href="{% url 'userena_profile_detail' meet.creater.username %}" class="pull-left">
+            <img src="{{ meet.creater.profile.mugshot|thumbnail_url:'com_header' }}">
+          </a>
+        {% else %}
+          <a href="{% url 'userena_profile_detail' meet.creater.username %}" class="pull-left">
+            <img src="{{ meet.creater.profile.get_mugshot_url }}" width="64" height="64">
+          </a>
+        {% endif %}
+
+        <div class="media-body">
+          <h2 style="margin-top: 0; padding-top: 0;"><a href="{% url 'userena_profile_detail' meet.creater.username %}">
+              {{ meet.creater.profile.get_nick_name }}
+            </a>正在召集<span class="text-primary">{{ meet.number }}</span>人微聚
+	{% if request.user == meet.creater %}
+	<span>
+	  <a class="btn btn-primary btn-sm" href="{% url 'meet_edit' meet.pk %}">编辑微聚</a>
+	</span>
+	{% endif %}
+          </h2>
+          <div class="row">
+            <div class="col-lg-10">
+              <table class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <td rowspan="2"><span class="point-td">目前完成进度为:</span> <span class="point-text">{{ point }}</span><strong>%</strong>
+                      <div class="progress pro-text">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ point }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ point }}%;">
+                          <span class="sr-only">60% Complete</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="td-height" style="background-color: #eee;">{{ joins|length }}人已报名</td>
+                  </tr>
+                  <tr>
+                    <td class="td-height" style="background-color: #eee;">{{ favs|length }}人感兴趣</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div> <!-- end col-9 -->
+            <div class="col-lg-2">
+              <table>
+                <tbody>
+                  <tr>
+                    {% if is_join %}
+                      <td class="td-fav-height"><a class="btn btn-primary btn-sm disabled" role="buttom" href="#">我要参加</a></td> {# 如果是已加入状态，则禁用加入按钮 #}
+                    <td><small><a href="/meet/{{ meet.id }}/unjoin/">取消</small></a></td>
+                  {% else %}
+                    {% if meet.over %}
+                      <td class="td-fav-height"><a class="btn btn-primary btn-sm disabled" role="buttom" href="#">我要参加</a></td>
+                    {% else %}
+                      <td class="td-fav-height"><a class="btn btn-primary btn-sm" href="/meet/{{ meet.id }}/join/">我要参加</a></td>
+                    {% endif %}
+                  {% endif %}
+                  </tr>
+                  <tr>
+                    {%if is_fav %}
+                      <td class="td-fav-height"><a class="btn btn-primary btn-sm disabled" role="buttom" href="#">我感兴趣</a></td>
+                    <td><a href="/meet/{{meet.id}}/unfav/"><small>取消</small></a></td>
+                  {% else %}
+                    <td class="td-fav-height"><a class="btn btn-primary btn-sm" role="buttom" href="/meet/{{ meet.id }}/fav/">我感兴趣</a></td>
+                  {% endif %}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div> <!-- end row -->
+        </div>
+      </div>
+
+    </div> <!-- end head -->
+
+    <h4 class="page-header-1"><strong class="t_c">微聚学友</strong></h4>
+    <div class="row">
+      {% if joins %}
+        {% for fav in joins %}
+          <div class="col-sm-6 col-md-1">
+            {% if fav.user.profile.mugshot %}
+              <a href="{% url 'userena_profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
+                <img src="{{ fav.user.profile.mugshot|thumbnail_url:'com_header' }}">
+              </a>
+            {% else %}
+
+              <a href="{% url 'userena_profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
+                <img src="{{ fav.user.profile.get_mugshot_url }}" width="64" height="64">
+              </a>
+
+            {% endif %}
+            <p style="width:64px; overlower: hidden;">
+              <a href="{% url 'userena_profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
+                <div class="you-header"><small>{{ fav.user.profile.get_nick_name }}</small></div>
+              </a>
+            </p>
+          </div>
+        {% endfor %}
+
+      {% endif %}
+    </div>
+
+
+    <h4 class="page-header-1"><strong class="t_c">微聚详情</strong></h4>
+    <div class="lesson-content">{{ meet.summary|markdown:"safe" }}</div>
+  </div> <!-- end home -->
+  
+
+{# </div> <!-- end tab --> #}
+{% endblock %}
+
+{% block meet_right %}
+  {% with lesson=meet.lesson %}
+  <div class="thumbnail">
+    <img src="{{ lesson.image |thumbnail_url:'lesson' }}" alt="">
+    <a href="{{ lesson.get_absolute_url }}" title="{{ lesson.name|safe }}""><div class="link-a"></div></a>
+    <div class="caption">
+      <h5 class="lesson-title"><a href="{{ lesson.get_absolute_url }}" title="{{ lesson.name|safe }}">{{ lesson.name|striptags|safe }}</a></h5>
+      <p class="lesson-con">{{ lesson.desc|striptags|slice:":80"|safe}}</p>
+      <p class="lesson-info">
+        <span>学友：{{ lesson.get_favs|length}}</span>
+        <span>讨论：{{ lesson.get_topics|length}}</span>
+        <span>浏览数：{% get_hit_count for lesson %}</span>
+      </p>
+      <p class="lesson-fun">
+        <small>由<a href="{% url 'userena_profile_detail' lesson.creater.username %}">{{ lesson.creater.profile.get_nick_name }}</a>创建于{{ lesson.created|date:"Y-m-d" }}</small></p>
+    </div>
+  </div>
+  {% endwith %}
+
+
+  <p><strong class="t_c">对这个微聚感兴趣的...</strong></p>
+  <div class="row">
+    {% if favs %}
+      {% for fav in favs|slice:":8" %}
+        <div class="col-sm-6 col-md-3">
+          {% if fav.user.profile.mugshot %}
+
+            <a href="{% url 'userena_profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
+              <img src="{{ fav.user.profile.mugshot|thumbnail_url:'com_header' }}">
+            </a>
+          {% else %}
+
+            <a href="{% url 'userena_profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
+              <img src="{{ fav.user.profile.get_mugshot_url }}" width="64" height="64">
+            </a>
+
+          {% endif %}
+          <p style="width:64px; overlower: hidden;">
+            <a href="{% url 'userena_profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
+              <div class="you-header"><small>{{ fav.user.profile.get_nick_name }}</small></div>
+            </a>
+          </p>
+        </div>
+      {% endfor %}
+
+    {% endif %}
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block script %}
+  <!-- JiaThis Button BEGIN -->
+  <script type="text/javascript" src="http://v3.jiathis.com/code/jiathis_r.js?uid=1376835720511795&move=0" charset="utf-8"></script>
+  <!-- JiaThis Button END -->
+{% endblock %}

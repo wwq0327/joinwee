@@ -1,0 +1,22 @@
+{% load comments i18n %}
+{% if user.is_authenticated %}
+
+<form action="{% comment_form_target %}" method="post" class="form-comment form-horizontal">
+  {% csrf_token %}
+  <textarea id="id_comment"  class="form-control" rows="4" name="comment" style="overflow: hidden;"></textarea>
+  <p></p>
+  {% for hidden in form.hidden_fields %}
+    {{ hidden }}
+  {% endfor %}
+  <input type="hidden" name="next" value="{{ t.get_absolute_url }}" />
+  <div class="form-group">
+    <div class="col-lg-offset-9 col-lg-3">
+      <button type="submit" class="btn btn-primary pull-right">贴上去</button>
+    </div>
+  </div>
+</form>
+{% else %}
+
+<p> 你需要 <a href="/accounts/signin/">登录</a> 才能进行回复。</p>
+
+{% endif %}

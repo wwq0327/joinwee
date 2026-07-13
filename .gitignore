@@ -1,0 +1,13 @@
+*.pyc
+*~
+*.swp
+*\#
+joinwee/media/uploads
+joinwee/media/uploads1
+joinwee/media/uploads/*
+joinwee/media/mugshots/*
+django.pid
+.venv/
+.DS_Store
+__pycache__/
+

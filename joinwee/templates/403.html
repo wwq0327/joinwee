@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}暂未开放注册{% endblock %}
+
+{% block content %}
+
+<div class="rom">
+<div class="my-top-header col-md-6 col-md-offset-4">
+	<h2>本站暂未开放注册</h2>
+	<p>你可以提交你的邮箱，后期开放注册后我们会给你发送注册邮件</p>
+	<form action="" method="post" class="form-inline" fole="form">
+		{% csrf_token %}
+		<fieldset>
+
+			{{ form.non_field_errors }}
+			{% for field in form %}
+			{{ field.errors }}
+			<div class="form-group">
+				<input type="email" class="form-control" id="id_{{ field.name }}" name="{{ field.name }}" placeholder="Enter email" />	
+			</div>
+			{% endfor %}
+			<button type="submit" class="btn btn-primary">提交申请</button>
+		</fieldset>
+	</form>	
+</div>
+
+</div>
+{% endblock %}

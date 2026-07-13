@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% load thumbnail %}
+{% load markup %}
+{% load pagination_tags %}
+
+{% block title %}所有微课{% endblock %}
+{% block content %}
+<div class="row">
+  <ul class="nav nav-pills lesson-nav my-top-header">
+    <li><a href="?order=featured">精品微课</a></li>
+	{# <li><a href="?order=hit">最受欢迎</a></li> #}
+    <li><a href="?order=time">最新微课</a></li>
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        微课难度<span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="?level=1">新手上路</a></li>
+        <li><a href="?level=2">中级进阶</a></li>
+        <li><a href="?level=3">高手切磋</a></li>
+        <li><a href="?level=4">适合所有读者</a></li>
+      </ul>
+    </li>
+
+  </ul>
+  <p></p>
+  {% if lessons %}
+    {% autopaginate lessons 12 %}
+    <div class="row">
+      {% include "weelesson/_lesson_list.html" %}
+    </div>
+  {% else %}
+    <p>暂无微快，快来<a href="/lesson/create/">创建</a>一个吧!</p>
+  {% endif %}
+  {% paginate %}
+</div>
+
+{% endblock %}
+
+

@@ -1,0 +1,25 @@
+{% extends "tags/sub_base.html" %}
+{% load thumbnail %}
+
+{% block lesson_main %}
+<h3 class="page-header">微课标签: {{ tag }}</h3>
+
+{% if lessons %}
+<div class="row">
+{% for lesson in lessons %}
+			<div class="col-sm-6 col-md-3 sm-6-bottom">
+				<div class="thumbnail">
+					<img src="{{ lesson.image |thumbnail_url:'lesson' }}" alt="">
+					<div class="caption">
+						<h5 class="lesson-title"><a href="{{ lesson.get_absolute_url }}" title="{{ lesson.name|safe }}">{{ lesson.name|striptags|safe }}</a></h5>
+						<p class="lesson-con">{{ lesson.summary|striptags|slice:":80"|safe}}</p>
+						<p class="lesson-fun"><small>由<a href="{% url 'userena_profile_detail' lesson.creater.username %}">{{ lesson.creater.profile.get_nick_name }}</a>创建于{{ lesson.created|date:"Y-m-d H:i" }}</small></p>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+
+</div>
+{% endif %}
+{% endblock %}
+

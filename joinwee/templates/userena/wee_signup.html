@@ -1,0 +1,19 @@
+{% extends "userena/base_userena.html" %}
+
+{% block title %}邮件验证{% endblock %}
+
+{% block content %}
+
+<div class="row my-top-header">
+  <div class="col-lg-offset-2 col-lg-8">
+    <div class="info-box">
+    {% if is_active %}
+    <div class="alert alert-success">你的邮箱已验证过了，请放心使用！</div>
+    {% else %}
+    <div class="alert alert-info">我们已向你的验证邮箱发送过了验证邮件，请查阅读你的邮件，并按邮件提示完成验证操作。</div>
+    {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "topics/sub_base.html" %}
+{% load thumbnail %}
+{% load comments %}
+{% load markup %}
+{% load hitcount_tags %}
+{% load weetimesince %}
+{% load pagination_tags %}
+
+{% block title %}{{ lesson.name|safe }}--讨论区 {% endblock %}
+
+{% block wee_header %}
+
+
+<div class="meet-header">
+  <div class="container">
+    《<a href="{{ lesson.get_absolute_url }}">{{ lesson.name|safe }}</a>》讨论区
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block meet_main %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>
+	<h4><span class="t_c text-left">所有讨论</span></h4>
+      </th>
+      <th class="text-right">
+	<small><a href="/discuss{{ lesson.get_absolute_url }}create"  class="btn btn-default btn-sm">+发言</a></small>
+      </th>
+    </tr>
+  </thead>
+</table>
+
+{% if topics %}
+{% autopaginate topics 20 %}
+<table class="table table-hover table-condensed">
+  <thead>
+    <tr>
+      <th>主题</th>
+      <th>发言人</th>
+      <th>条数</th>
+      <th>时间</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for topic in topics %}
+    {% get_comment_count for topics.topics topic.id as comment_count %}
+    <tr>
+      <td><a href="{{ topic.get_absolute_url }}" title="{{ topic.title }}">{{ topic.title|slice:"42" }}</a></td>
+      <td><a href="{% url 'userena_profile_detail' topic.user.username %}">{{ topic.user.profile.get_nick_name }}</a></td>
+      <td>{{ comment_count }}条回应</td>
+      <td>{{ topic.pub_date|weetimesince:"Y-m-d H:i" }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="text-center">
+  {% paginate %}
+</div>
+
+{% else %}
+<p>本微课下暂时还没有讨论～～</p>
+{% endif %}
+
+{% endblock %}
+
+
+{% block meet_right %}
+
+{% include "topics/_t_lesson.html" %}
+
+{% endblock %}
+
+
+

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% load thumbnail %}
+{% load markup %}
+
+{% block title %}微聚{% endblock %}
+{% block content %}
+<div class="row">
+        <ul class="nav nav-pills lesson-nav my-top-header">
+          <li><a href="/meet/">所有微聚</a></li>
+          <li><a href="?order=doing">进行中的</a></li>
+          <li><a href="?order=pre">筹备中的</a></li>
+          <li><a href="?order=pass">往期回顾</a></li>
+        </ul>
+        <p></p>
+        {% if meets %}
+          <div class="row">
+            {% include "weemeet/_meet_list.html" %}
+          </div>
+        {% else %}
+          暂无微聚
+        {% endif %}
+
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,22 @@
+.affix {
+    width: 100%;
+    position: fixed;
+    top: 30px;
+}
+
+.affix-bottom {
+   width: inherit;
+   top:auto;
+   bottom: 150px;
+   position: absolute;
+}
+
+.affix-top {
+	width: inherit;
+}
+
+#affix-list {
+  z-index: 32000;
+  background: #fff;
+  
+}

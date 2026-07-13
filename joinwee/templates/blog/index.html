@@ -1,0 +1,24 @@
+{% extends "blog/sub_base.html" %}
+{% load markup %}
+{% load pagination_tags %}
+
+{% block title %}博客{% endblock %}
+
+{% block blog_main %}
+{% if posts %}
+{% autopaginate posts 5 %}
+{% for post in posts %}
+{% include "blog/_post.html" %}
+{% endfor %}
+{% else %}
+
+<h3>暂时还没有新博客文章发布</h3>
+{% endif %}
+
+{% paginate %}
+{% endblock %}
+
+{% block blog_right %}
+{% include "blog/_right.html" %}
+{% endblock %}
+

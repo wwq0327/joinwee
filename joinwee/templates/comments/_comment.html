@@ -1,0 +1,39 @@
+{% load thumbnail %}
+{% load comments %}
+{% load markup %}
+{% load weetimesince %}
+{% load atuser %}
+{% load pagination_tags %}
+
+<div>
+	<h4 class="page-header t_c">共有 <span class="label label-default">{{ comment_count }}</span>条交流记录</h4>
+	{% autopaginate comment_list 10 %}
+	{% for comment in comment_list %}
+
+	<div class="media">
+		{% if comment.user.profile.mugshot %}
+		<a class="pull-left" href="{% url 'userena_profile_detail' comment.user.username %}"><img src="{{ comment.user.profile.mugshot|thumbnail_url:'com_header' }}"></a>
+		{% else %}
+		<a class="pull-left" href="{% url 'userena_profile_detail' comment.user.username%}"><img src="{{ comment.user.profile.get_mugshot_url }}" height="64" width="64"></a>
+		{% endif %}
+		<div class="media-body">
+			<h5 class="media-heading"><a href="{% url 'userena_profile_detail' comment.user.username %}"> {{ comment.user.profile.get_nick_name }}</a></h5>
+			<p class="info-border">
+			  <small>发言时间：{{ comment.submit_date|weetimesince:"Y-m-d H:i" }}</small>
+			  <small>
+				{% if request.user == comment.user %}
+				<a href="{% url 'cm_del' comment.id %}" class="text-muted">删除</a>
+				{% endif %}
+			  </small>
+			</p>
+			<div class="topic-content">{{ comment.comment|urlize|linebreaks }}</div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+
+<hr>
+
+<div class="text-center">
+  {% paginate %}
+</div>

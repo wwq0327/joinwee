@@ -1,0 +1,45 @@
+{% extends "home/sub_base.html" %}
+{% load thumbnail %}
+{% load hitcount_tags %}
+
+{% block title %}WEE{% endblock %}
+
+{% block content %}
+
+<div class="jumbotron my-top-header">
+  <h2 class="t_c"><strong>欢迎来到WEE项目网站</strong></h2>
+  <p class="lead">
+    “WEE”，来自“WE Education”两个单词的结合。WEE代表着我们是开放教育的设计与践行者，用我们的智慧创造更多好玩有趣的“三人行必有我师”的开放学习机会。
+  </p>
+</div>
+
+<div class="row">
+  <h4 class="page-header-1">精品微课<small class="text-right"><a href="{% url 'weelesson.views.index' %}">( 更多... )</a></small></h4>
+  {# 判断数据有无 #}
+  {% if lessons %}
+  {% for lesson in lessons %}
+  <div class="col-xs-3 sm-6-bottom">
+    <div class="thumbnail">
+      <img src="{{ lesson.image |thumbnail_url:'lesson' }}" alt="{{ lesson.name }}">
+      <a href="{{ lesson.get_absolute_url }}" title="{{ lesson.name|safe }}""><div class="link-a"></div></a>
+      <div class="caption">
+        <h5 class="lesson-title"><a href="{{ lesson.get_absolute_url }}" title="{{ lesson.name|safe }}">{{ lesson.name|striptags|safe }}</a></h5>
+        <p class="lesson-info">
+          <span>学友：{{ lesson.get_favs|length}}</span>
+          <span>讨论：{{ lesson.get_topics|length}}</span>
+          <span>浏览数：{% get_hit_count for lesson %}</span>
+        </p>
+	
+        <p class="lesson-fun"><small>由<a href="{% url 'userena_profile_detail' lesson.creater.username %}">{{ lesson.creater.profile.get_nick_name }}</a>创建于{{ lesson.created|date:"Y-m-d" }}</small></p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <p>暂无微课,快来<a href="/lesson/create/">创建</a>一个吧!</p>
+  {% endif %}
+</div>
+
+{% endblock %}
+
+

@@ -1,0 +1,22 @@
+{% extends "blog/sub_base.html" %}
+{% load markup %}
+
+{% block title %}{{ post.title }} - 博客{% endblock %}
+
+{% block blog_main %}
+
+{% include "blog/_post.html" %}
+
+<div class="blog-comment">
+  <h4 class="page-header t_c">相关评论</h4>
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=88996"></script>
+<!-- UY END -->
+</div>
+{% endblock %}
+
+{% block blog_right %}
+{% include "blog/_right.html" %}
+{% endblock %}
+

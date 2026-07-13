@@ -1,0 +1,120 @@
+{% extends "weelesson/sub_edit.html" %}
+
+{% load bootstrap3 %}
+
+{% block title %}{% if is_edit %}编辑微课{% else %}创建一个微课{% endif %}{% endblock %}
+
+{% block ed_main %}
+
+<div class="row">
+  <div class="col-lg-offset-1 col-lg-5">
+    <h4>第一步：编写微课内容
+      <a href="javascript:void(0);" rel="{{ lesson.id }}" class="btn btn-primary btn-sm" id="draft-save-1">保存</a>
+       <a href="{% if lesson.is_draft %}{% url 'lesson_draft' lesson.id %}{% else %}{% url 'weelesson_detail' lesson.id %}{% endif %}" class="lesson-publish btn btn-default btn-sm" role="button">回到微课</a>
+    </h4>
+  </div>
+  <div class="col-lg-5 text-right">
+    <h4 style="padding-top: 6px;"><a href="{% url 'lesson_info' lesson.id %}" class="lesson-publish">第二步：编辑微课简介</a>
+    </h4>
+  </div>
+</div>
+
+<form enctype="multipart/form-data" action="" method="post" class="form-horizontal my-top-header">
+  {% csrf_token %}
+  <fieldset>
+    {{ form.non_field_errors }}
+    {% if form.errors %}
+    <div class="row"><div class="col-lg-offset-1 col-lg-10">
+      <div class="alert alert-warning alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	请将页面中信息填写完整再点击提交
+      </div>
+    </div></div>
+    {% endif %}
+
+    <div class="row">
+      <div class="col-lg-offset-1 col-lg-10">
+	<div class="col-lg-12">
+	  {% bootstrap_field form.name show_label=False show_help=False %}
+
+	</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-offset-1 col-lg-10">
+
+    <div id="epiceditor"></div>
+    {% bootstrap_field form.materials show_label=False show_help=False  %}
+    <script src="{{ MEDIA_URL }}epiceditor/js/epiceditor.min.js"></script>
+    <script type="text/javascript">
+      var opts = {
+        container: 'epiceditor',
+        textarea:'id_materials',
+        basePath: '{{ MEDIA_URL }}epiceditor',
+        clientSideStorage: false,
+        localStorageName: 'epiceditor',
+        useNativeFullscreen: true,
+        parser: marked,
+        file: {
+          name: 'epiceditor',
+          defaultContent: '',
+          autoSave: 100
+        },
+        focusOnLoad: true,
+        theme: {
+          base: '/themes/base/epiceditor.css',
+          preview: '/themes/preview/github.css',
+          editor: '/themes/editor/epic-light.css'
+        },
+        button: {
+          preview: true,
+          fullscreen: true,
+          bar: "auto"
+        },
+        focusOnLoad: false,
+        shortcut: {
+          modifier: 18,
+          fullscreen: 70,
+          preview: 80
+        },
+        string: {
+          togglePreview: '进入预览模式',
+          toggleEdit: '进入编辑模式',
+          toggleFullscreen: '进入全屏模式'
+        },
+        autogrow: {
+          minHeight: 420,
+          // maxHeight: 580
+        }
+      }
+      var editor = new EpicEditor(opts);
+      editor.load(function () {
+        console.log("Markdown Editor loaded.")
+      });
+
+  </script>
+  </div>
+  </div>
+  </fieldset>
+</form>
+
+<div class="row">
+  <div class="col-lg-offset-1 col-lg-5">
+    <h4>第一步：编写微课内容
+      <a href="javascript:void(0);" rel="{{ lesson.id }}" class="btn btn-primary btn-sm" id="draft-save">保存</a>
+      <a href="{% if lesson.is_draft %}{% url 'lesson_draft' lesson.id %}{% else %}{% url 'weelesson_detail' lesson.id %}{% endif %}" class="lesson-publish btn btn-default btn-sm"role="button">回到微课</a>
+    </h4>
+  </div>
+  <div class="col-lg-5 text-right">
+    <h4 style="padding-top: 6px;"><a href="{% url 'lesson_info' lesson.id %}" class="lesson-publish">第二步：编辑微课简介</a></h4>
+  </div>
+</div>
+
+<div id="save-msg" class="hide"></div>
+<p></p>
+{% endblock %}
+
+{% block script %}
+<link href="{{ MEDIA_URL }}epiceditor/base/epiceditor.css" rel="stylesheet">
+{% endblock %}

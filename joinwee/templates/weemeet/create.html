@@ -1,0 +1,106 @@
+{% extends "weemeet/sub_base.html" %}
+{% load thumbnail %}
+{% load markup %}
+{% block css %}
+<link href="{{ MEDIA_URL }}css/bootstrap-datetimepicker.css" rel="stylesheet" media="screen">
+{% endblock %}
+
+{% block title %}{% if is_edit %}编辑微聚{% else %}创建一个微聚{% endif %}{% endblock %}
+
+{% block meet_main %}
+<form enctype="multipart/form-data" action="" method="post" class="form-horizontal meet-form">
+        {% csrf_token %}
+        <fieldset>
+        {% if is_edit %}
+        <legend>编辑你的微聚</legend>
+        {% else %}
+        <legend>创建《<a href="{{ lesson.get_absolute_url }}">{{ lesson.name }}</a>》的线下微聚</legend>
+        {% endif %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+        {{ field.errors }}
+        <div class="form-group">
+          <label for="id_{{ field.name}}" class="col-lg-2 control-label">{{ field.label_tag }}</label>
+          <div class="{% if field.name == 'summary' %}col-lg-8{% else %}col-lg-4{% endif %}">{{ field }}
+
+            {% if field.help_text %}
+            <span class="help-block"><small>( {{ field.help_text|safe }} )</small></span>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+        <div class="form-group">
+          <div class="col-lg-offset-2 col-lg-8">
+	    {% if is_edit %}
+            <button type="submit" class="btn btn-primary">提交修改</button>
+	    <a href="{% url 'meet_delete' meet.pk %}" class="btn btn-danger rm">删除微聚</a>
+	    {% else %}
+            <button type="submit" class="btn btn-primary">创建微聚</button>
+	    {% endif %}
+          </div>
+	</div>
+	</fieldset>
+</form>
+{% endblock %}
+
+{% block meet_right %}
+{% if lesson %}
+<h4>所属微课</h4>
+<div>
+        <a href="{{ lesson.lesson.get_absolute_url }}">
+        <img src="{{ lesson.image|thumbnail_url:'header' }}" class="img-thumbnail">
+    </a>
+</div>
+
+<p>微课：<a href="{{ lesson.get_absolute_url }}">{{ lesson.name }}</a></p>
+
+<p><strong>微课简介</strong></p>
+<p><small>{{ lesson.summary|linebreaks|slice:"200" }}</small></p>
+
+{% endif %}
+
+<h4>Markdown语法简明帮助</h4>
+<code>
+<strong>标题</strong><br />
+# 标题1<br />
+## 标题2<br />
+###  标题3<br />
+
+<strong>强调</strong><br />
+*文本* **文本**<br />
+_文本_ __文本__<br />
+<strong>链接</strong><br />
+[Google](http://www.google.com) <br />
+<strong>图片</strong><br />
+![alt text](/path/img.jpg)<br />
+<strong>列表</strong><br />
+* a list item<br />
+* Bar<br />
+</code>
+{% endblock %}
+
+{% block script %}
+
+<script type="text/javascript" src="{{ MEDIA_URL }}js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+
+<script type="text/javascript">
+ $("#id_start_time").datetimepicker({
+   format: "yyyy-mm-dd hh:ii",
+   autoclose: true,
+   todayHighlight: true,
+   weekStart: 1,
+   pickerPosition: "bottom-right",
+   language: "zh-CN"
+ });
+
+ $("#id_end_time").datetimepicker({
+   format: "yyyy-mm-dd hh:ii",
+   autoclose: true,
+   todayHighlight: true,
+   weekStart: 1,
+   pickerPosition: "bottom-right",
+   language: "zh-CN"
+ });
+</script>
+{% endblock %}

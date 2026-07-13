@@ -1,0 +1,52 @@
+{% extends "weelesson/sub_base.html" %}
+
+{% load markup %}
+
+{% block title %}{{ lesson.name }}{% endblock %}
+
+{% block wee_header %}
+<div class="meet-header">
+  <div class="container">
+    {{ lesson.name }}
+  </div>
+</div>
+{% endblock %}
+
+
+{% block lesson_main %}
+
+  <div class="lesson-content">{{ lesson.materials|markdown:"safe" }}</div>
+
+{% endblock %}
+
+{% block lesson_right %}
+
+      {% if lesson.is_draft == True %}
+<div class="well well-lg">
+  <h5><a href="{% url 'lesson_draft' lesson.id %}" target="_blank">{{ lesson.name }}</a><small>状态：草稿</small></h5>
+  <div>
+    <small>
+      创建于：{{ lesson.created|date:"Y/m/d H:i"}} <br />
+      最后修改于：{{ lesson.updated|date:"Y/m/d H:i" }}<br />
+    </small>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-lg-6">
+      <a href="{% url 'lesson_edit' lesson.id %}" class="btn btn-info btn-sm btn-block" role="button">继续修改</a>
+    </div>
+    <div class="col-lg-6">
+      <a href="{% url 'lesson_delete' lesson.id %}" class="rm btn btn-danger btn-sm btn-block" role="button">删除微课</a>
+    </div>
+  </div>
+  <hr>
+  <div>
+    <p>如果你已写好了这个微课，请点击下面的按钮发布吧！</p>
+    <a href="{% url 'lesson_info' lesson.id %}" class="btn btn-primary btn-block" role="button">去编辑微课简介</a>
+  </div>
+</div>
+
+{% endif %}
+
+
+{% endblock %}

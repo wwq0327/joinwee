@@ -1,0 +1,70 @@
+{% extends 'userena/base_userena.html' %}
+{% load i18n %}
+{% load url from future %}
+
+{% block title %}欢迎登录WEE{% endblock %}
+
+{% block content %}
+<h2 class="page-header">欢迎登录WEE</h2>
+<div class="my-top-header">
+  <div class="row">
+    <div class="col-lg-8">
+      <form action="" method="post" class="form-horizontal">
+      {% csrf_token %}
+      <fieldset>
+	{{ form.non_field_errors }}
+	{# 显示表单的错误信息 #}
+
+	{% comment %} Displaying checkboxes differently {% endcomment %}
+	{% for field in form %}
+	{% if field.name == 'remember_me' %}
+	<div class="form-group">
+          <div class="col-lg-offset-4 col-lg-6">
+            <div class="checkbox">
+              <label for="id_{{ field.name }}">{{ field }} {{ field.label }} |
+		<a href="{% url 'userena_password_reset' %}" title="{% trans 'Forgot your password?' %}">{% trans "Forgot your password?" %}</a>
+              </label>
+            </div>
+          </div>
+	</div>
+	{% else %}
+	<p>
+          <div class="form-group">
+            <label for="id_{{ field.name }}" class="col-lg-4 control-label">{{ field.label_tag }}</label>
+            <div class="col-lg-4">{{ field }}</div>
+
+	      {% if field.errors %}
+	      <div class="col-lg-4"><span class="text-danger">{{ field.errors }}</span></div>
+	      {% endif %}
+          </div>
+	</p>
+	{% endif %}
+	{% endfor %}
+
+	<div class="from-group">
+	  <div class="col-lg-offset-4 col-lg-2">
+	    <input type="submit" class="btn btn-primary btn-block" value="{% trans "Signin" %}" />
+	  </div>
+	</div>
+      </fieldset>
+      {% if next %}<input type="hidden" name="next" value="{{ next }}" />{% endif %}
+  </form>
+    </div>
+
+    <div class="col-lg-4">
+      <strong><small>你还可以用第三方帐号登录</small></strong>
+      <div class="extoauth2">
+
+	<a class="icon weibo" href="{% url 'socialauth_begin' 'weibo' %}">微博登录</a>
+	<a class="icon douban" href="{% url 'socialauth_begin' 'douban2' %}">豆瓣登录</a>
+      </div>
+
+      <p><small><span class="text-muted">还没有帐号？</span><a href="{% url 'userena_signup' %}">马上注册</a></small></p>
+
+    </div>
+
+  </div> 
+
+</div>
+
+{% endblock %}

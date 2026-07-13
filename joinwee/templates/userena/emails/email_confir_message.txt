@@ -1,0 +1,15 @@
+{% load i18n %}{% autoescape off %}{% load url from future %}
+{% if not without_usernames %}{% blocktrans with user.username as username %}Dear {{ username }},{% endblocktrans %}
+{% endif %}
+
+
+请点击以下链接确认你的邮件，您的邮件将成为您在{{ site.name }}最重要的身份认证。
+
+{{ protocol }}://{{ site.domain }}{% url 'social_email_confirm' confirmation_key %}
+
+
+{% trans "Thanks for using our site!" %}
+
+{% trans "Sincerely" %},
+{{ site.name }}
+{% endautoescape %}

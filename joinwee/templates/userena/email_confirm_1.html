@@ -1,0 +1,12 @@
+{% extends "userena/base_userena.html" %}
+
+{% block title %}邮件验证{% endblock %}
+
+{% block content %}
+
+{% if is_active %}
+<h4>邮件验证成功</h4>
+{% else %}
+<h4>你所邮件验证不正确，或访问地址不存在。</h4>
+{% endif %}
+{% endblock %}

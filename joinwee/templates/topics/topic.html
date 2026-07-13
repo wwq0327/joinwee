@@ -1,0 +1,123 @@
+{% extends "topics/sub_base.html" %}
+{% load thumbnail %}
+{% load comments %}
+{% load markup %}
+{% load hitcount_tags %}
+{% load weetimesince %}
+
+
+{% block title %}{{ t.title|safe }} {% endblock %}
+{% block css %}
+<link href="{{ MEDIA_URL }}css/reader.css" rel="stylesheet">
+<script type="text/javascript">
+var csrf_token = '{{ csrf_token }}';
+$(document).ready(function() {
+    {% get_hit_count_javascript for t %}
+        });
+</script>
+{% endblock %}
+
+{% block wee_header %}
+
+<div class="meet-header">
+  <div class="container">
+    《<a href="{{lesson.get_absolute_url }}">{{ lesson.name|safe }}</a>》讨论区
+  </div>
+</div>
+{% endblock %}
+
+{% block meet_main %}
+
+<div class="topic-header">{{ t.title|safe }}</div>
+
+<div class="media">
+  {% if t.user.profile.mugshot %}
+  <a class="pull-left" href="{% url 'userena_profile_detail' t.user.username %}">
+    <img src="{{t.user.profile.mugshot|thumbnail_url:'com_header'}}">
+
+  </a>
+  {% else %}
+  <a class="pull-left" href="{% url 'userena_profile_detail' t.user.username %}">
+    <img src="{{ t.user.profile.get_mugshot_url }}" height="64" width="64">
+  </a>
+  {% endif %}
+  <div class="media-body">
+    <small class="media-heading info-border"><a href="{% url 'userena_profile_detail' t.user.username %}">{{ t.user.profile.get_nick_name }}</a> 发布时间： {{ t.pub_date|weetimesince:"Y-m-d H:i" }}，共有 {% get_hit_count for t %} 人浏览了这个讨论
+      {% if request.user == t.user %}
+      | <a href="{% url 't_edit' t.id %}">编辑</a>
+      | <a class="rm" href="{% url 't_delete' t.id %}">删除</a>
+      {% endif %}
+    </small>
+    <div class="lesson-content">{{ t.comment|markdown:"safe" }}</div>
+    <!-- JiaThis Button BEGIN -->
+    <div class="jiathis_style">
+      <small class="pull-left" style="padding-bottom: 5px;line-height: 16px;">分享到：</small>
+      <a class="jiathis_button_tsina"></a>
+      <a class="jiathis_button_tqq"></a>
+      <a class="jiathis_button_weixin"></a>
+      <a class="jiathis_button_renren"></a>
+      <a class="jiathis_button_douban"></a>
+      <a class="jiathis_button_qzone"></a>
+      <a class="jiathis_button_googleplus"></a>
+      <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+      <a class="jiathis_counter_style"></a>
+    </div>
+    <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js?uid=1389107666076131" charset="utf-8"></script>
+    <!-- JiaThis Button END -->
+  </div>
+</div>
+
+{% get_comment_list for topics.topics t.id as comment_list %}
+{% get_comment_count for topics.topics t.id as comment_count %}
+
+{% include 'comments/_comment.html' %}
+<div>
+        <h4 class="page-header t_c">你想说...</h4>
+        <div>{% render_comment_form for topics.topics t.id %}</div>
+</div>
+
+{% endblock %}
+
+
+{% block meet_right %}
+
+{% include "topics/_t_lesson.html" %}
+
+
+{% if other_topics %}
+<p></p>
+<div id="affix-list" style="width:257px;">
+<p style="width: 257px;">
+  <strong class="t_c">本微课其它<span class="badge">{{ other_topics|length }}</span>条讨论</strong>
+</p>
+
+<table class="table table-hover" style="width: 257px;">
+  <tbody>
+
+  {% for ot in other_topics %}
+   <tr>
+     <td><a href="{{ ot.get_absolute_url }}"><small>{{ ot.title|safe }}</small></a></td>
+   </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block script %}
+
+<script type="text/javascript" >
+var myside = $('.myside').outerHeight(true);
+
+$('#affix-list').affix({
+    offset: {
+        top: myside,
+        bottom: function() {
+            return (this.bottom = $('footer').outerHeight(true))
+        }
+    }
+});
+</script>
+{% endblock %}
+

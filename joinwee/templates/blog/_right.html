@@ -1,0 +1,30 @@
+<script type="text/javascript">
+ var dispatch_blog = function() {
+   q = document.getElementById("q");
+   if (q.value != "") {
+     window.open('http://www.google.com/search?q=site:' + 'joinwee.com/blog' +'%20' + q.value, "_blank");
+     return false;
+   } else {
+     return false;
+   }
+ }
+</script>
+
+<!-- 
+<form onsubmit="return dispatch_blog()">
+  <div class="form-group">
+    <input name="q" id="q" type="text" placeholder="博客搜索" class="form-control" style="width: 100%;">
+  </div>
+</form>
+-->
+<h5 class="page-header-1 t_c">关注我们</h5>
+<p>新浪微博：<a href="http://weibo.com/joinwee/">@joinwee</a></p>
+
+<h5 class="page-header-1 t_c">最近文章</h5>
+{% if last %}
+<ul class="list-unstyled">
+{% for p in last %}
+  <li><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
