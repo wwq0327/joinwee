@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 import os
-from decouple import config
+from decouple import AutoConfig
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 path = lambda *a: os.path.join(ROOT, *a)
+
+config = AutoConfig(search_path=os.path.join(ROOT, '..', '..'))
+
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 ADMINS = (
     ('master', 'master@joinwee.com'),
