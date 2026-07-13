@@ -4,11 +4,9 @@
 {% block title %}{{ t.title|safe }} {% endblock %}
 {% block css %}
 <link href="{{ MEDIA_URL }}css/reader.css" rel="stylesheet">
-<script type="text/javascript">
+<script>
 var csrf_token = '{{ csrf_token }}';
-$(document).ready(function() {
-    {% insert_hit_count_js for t %}
-});
+{% insert_hit_count_js for t %}
 </script>
 {% endblock %}
 
