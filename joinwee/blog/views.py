@@ -16,7 +16,7 @@ class CommentForm(forms.Form):
 
 
 def index(request):
-    posts = Post.objects.all()
+    posts = Post.objects.all().select_related('author')
     return render(request, 'blog/index.html', {'posts': posts, 'last': posts[:10]})
 
 def post(request, slug):
@@ -35,7 +35,7 @@ def post(request, slug):
     else:
         form = CommentForm()
 
-    comments = p.comments.all()
+    comments = p.comments.select_related('user').all()
     return render(request, 'blog/post.html', {
         'post': p,
         'last': posts[:10],
