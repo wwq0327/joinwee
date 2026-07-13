@@ -18,12 +18,19 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(ROOT, '..', 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'wee',
+        'USER': 'root',
+        'PASSWORD': 'gogo90',
+        'HOST': 'localhost',
+        'PORT': '',
+        'OPTIONS': {
+            'charset': 'utf8',
+        },
     }
 }
 
-ALLOWED_HOSTS = ['.joinwee.com', '115.29.168.222', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['.joinwee.com', '115.29.168.222']
 
 TIME_ZONE = 'Asia/Chongqing'
 

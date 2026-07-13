@@ -45,7 +45,7 @@
           <div class="collapse navbar-collapse" role="navigation">
             <ul class="nav navbar-nav">
               <li><a href="/">首页</a></li>
-              <li><a href="{% url 'weelesson.views.index' %}">微课</a></li>
+              <li><a href="{% url 'lesson_index' %}">微课</a></li>
               <li><a href="#">学友</a></li>
 	      <li><a href="{% url 'blog_index' %}">博客</a></li>
             </ul>
@@ -68,7 +68,7 @@
                   </div>
                 </form>
               </li>
-              <li><a href="{% url 'weelesson.views.create' %}">创建微课</a></li>
+              <li><a href="{% url 'lesson_create' %}">创建微课</a></li>
               {% if user.is_authenticated %}
 	      {% notifications_unread as unread_count %}
 	      <li><a href="{% url 'notifications:all' %}">消息{% if unread_count %}<span class="badge">{{ unread_count }}</span>{% endif %}</a></li>

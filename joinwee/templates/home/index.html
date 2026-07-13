@@ -14,7 +14,7 @@
 </div>
 
 <div class="row">
-  <h4 class="page-header-1">精品微课<small class="text-right"><a href="{% url 'weelesson.views.index' %}">( 更多... )</a></small></h4>
+  <h4 class="page-header-1">精品微课<small class="text-right"><a href="{% url 'lesson_index' %}">( 更多... )</a></small></h4>
   {# 判断数据有无 #}
   {% if lessons %}
   {% for lesson in lessons %}
