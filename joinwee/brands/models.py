@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 from easy_thumbnails.fields import ThumbnailerImageField
 
 class Brands(models.Model):
@@ -14,18 +15,17 @@ class Brands(models.Model):
             upload_to='uploads/brands',
             help_text=u'请查看相LOGO制作要求')
     created = models.DateTimeField(auto_now_add=True)
-    creater = models.ForeignKey(User)
+    creater = models.ForeignKey(User, on_delete=models.CASCADE)
     summary = models.TextField(u'品牌简介', blank=True, null=True)
     active = models.BooleanField(default=0)
 
     class Meta:
         ordering = ['-id']
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('brands_detail', (), {'pk': self.pk})
+        return reverse('brands_detail', kwargs={'pk': self.pk})
 
 

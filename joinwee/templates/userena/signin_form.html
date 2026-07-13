@@ -22,7 +22,7 @@
           <div class="col-lg-offset-4 col-lg-6">
             <div class="checkbox">
               <label for="id_{{ field.name }}">{{ field }} {{ field.label }} |
-		<a href="{% url 'userena_password_reset' %}" title="{% trans 'Forgot your password?' %}">{% trans "Forgot your password?" %}</a>
+		<a href="{% url 'account_reset_password' %}" title="{% trans 'Forgot your password?' %}">{% trans "Forgot your password?" %}</a>
               </label>
             </div>
           </div>
@@ -59,7 +59,7 @@
 	<a class="icon douban" href="{% url 'socialauth_begin' 'douban2' %}">豆瓣登录</a>
       </div>
 
-      <p><small><span class="text-muted">还没有帐号？</span><a href="{% url 'userena_signup' %}">马上注册</a></small></p>
+      <p><small><span class="text-muted">还没有帐号？</span><a href="{% url 'account_signup' %}">马上注册</a></small></p>
 
     </div>
 

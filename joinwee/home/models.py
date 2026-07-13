@@ -7,6 +7,6 @@ class First(models.Model):
     class Meta:
         ordering = ['-id']
 
-    def __unicode__(self):
+    def __str__(self):
         return self.email
 

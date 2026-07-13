@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
-from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404
-from django.template import RequestContext
-from django.core.urlresolvers import reverse
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-
-from django.contrib import comments
-from django.contrib.comments.views.moderation import perform_delete
 
 from topics.models import Topics
 from topics.forms import TopicsForm
@@ -21,9 +17,8 @@ def all(request, pk):
     m = ct.get_object_for_this_type(pk=pk) #得到相应的数据
     topics = Topics.objects.for_model(m) # 反相本课程下的讨论话题
 
-    return render_to_response('topics/all.html',
-                              {'topics': topics, 'lesson': m},
-                              context_instance=RequestContext(request))
+    return render(request, 'topics/all.html',
+                              {'topics': topics, 'lesson': m})
 
 @login_required
 def create(request, app, pk):
@@ -42,9 +37,8 @@ def create(request, app, pk):
     else:
         form = TopicsForm()
 
-    return render_to_response('topics/create.html',
-            {'form': form, 'm': m},
-            context_instance=RequestContext(request))
+    return render(request, 'topics/create.html',
+            {'form': form, 'm': m})
 
 @login_required
 def edit(request, pk):
@@ -63,9 +57,8 @@ def edit(request, pk):
     else:
         form = TopicsForm(instance=m)
 
-    return render_to_response('topics/create.html',
-            {'form': form, 'm': m, 'is_edit': True},
-            context_instance=RequestContext(request))
+    return render(request, 'topics/create.html',
+            {'form': form, 'm': m, 'is_edit': True})
 
 def topic(request, pk):
     t = get_object_or_404(Topics, pk=pk)
@@ -78,12 +71,11 @@ def topic(request, pk):
         other_topics = None
     #print other_topics
     
-    return render_to_response('topics/topic.html',
+    return render(request, 'topics/topic.html',
             {'t': t,
              'other_topics': other_topics,
              'lesson': lesson,
-             },
-            context_instance=RequestContext(request))
+             })
 
 @login_required    
 def delete(request, pk):
@@ -105,11 +97,9 @@ def delete(request, pk):
 
 @login_required
 def delete_comment(request, pk):
-	comment = get_object_or_404(comments.get_model(), pk=pk)
-	next = comment.content_object.get_absolute_url()
-	if comment.user != request.user:
-		raise Http404
-	perform_delete(request, comment)
-
-	return HttpResponseRedirect(next)
+    t = get_object_or_404(Topics, pk=pk)
+    if t.user != request.user:
+        raise Http404
+    t.delete()
+    return HttpResponseRedirect('/')
 	

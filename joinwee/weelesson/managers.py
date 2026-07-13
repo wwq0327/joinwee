@@ -12,15 +12,15 @@ class LessonQuerySet(QuerySet):
         return self.filter(is_draft=False)
 
 class LessonManager(Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return LessonQuerySet(self.model, using=self._db)
 
     def draft(self):
-        return self.get_query_set().draft()
+        return self.get_queryset().draft()
 
     def published(self):
-        return self.get_query_set().published()
+        return self.get_queryset().published()
 
     def fine(self):
-        return self.get_query_set().fine()
+        return self.get_queryset().fine()
     

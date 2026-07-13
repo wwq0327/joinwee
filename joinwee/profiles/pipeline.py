@@ -19,7 +19,7 @@ def set_guardian_permissions(user=None, profile=None, *args, **kwargs):
     """
     Give the user permission to modify themselves
     """
-    if not user or not user.is_authenticated():
+    if not user or not user.is_authenticated:
         return
 
     if profile:

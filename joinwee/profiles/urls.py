@@ -1,18 +1,9 @@
+from django.urls import path, re_path
+from profiles import views
 
-from django.conf.urls import *
-from userena import views as userena_views
-
-from profiles.forms import BsEditProfileForm, BsSignupForm, SignupFormOnlyEmail
-
-urlpatterns = patterns('',
-
-                       url(r'^(?P<username>[\.\w]+)/edit/$',
-                           userena_views.profile_edit,
-                           {'edit_profile_form': BsEditProfileForm}, name='userena_profile_edit'),
-                       url(r'^signup/$', userena_views.signup,
-                           {'signup_form': BsSignupForm}, name='userena_signup'),
-
-                       url(r'^', include('userena.urls')),
-                       url(r'^(?P<username>[\.\w]+)/lmg/$', 'profiles.views.manager_lesson', name="le_mg"),
-                       url(r'^email_confirm/(?P<c_key>\w+)/$', 'profiles.views.email_confirm', name="social_email_confirm"),
-)
+urlpatterns = [
+    re_path(r'^(?P<username>[\w.@+-]+)/$', views.profile_detail, name='profile_detail'),
+    re_path(r'^(?P<username>[\w.@+-]+)/edit/$', views.profile_edit, name='userena_profile_edit'),
+    re_path(r'^(?P<username>[\w.@+-]+)/lmg/$', views.manager_lesson, name='le_mg'),
+    path('email_confirm/<c_key>/', views.email_confirm, name='social_email_confirm'),
+]

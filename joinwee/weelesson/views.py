@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, Http404
-from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404
-from django.template import RequestContext
-from django.core.urlresolvers import reverse
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
@@ -20,7 +19,6 @@ def index(request):
     '''微课首页面'''
 
     if request.GET.get('order', '') == 'featured':
-        #lessons = get_list_or_404(WEELesson, is_fine=True, is_draft=False)
         lessons = WEELesson.objects.published().fine()
     elif request.GET.get('order', '') == 'hit':
         ct = ContentType.objects.get(app_label='weelesson', model='weelesson')
@@ -33,64 +31,56 @@ def index(request):
     else:
         lessons = WEELesson.objects.published()
 
-    return render_to_response('weelesson/index.html',
-            {'lessons': lessons},
-            context_instance=RequestContext(request))
+    return render(request, 'weelesson/index.html',
+            {'lessons': lessons})
 
 def draft(request, pk):
     lesson = get_object_or_404(WEELesson, pk=pk)
-    if lesson.creater != request.user or lesson.is_draft == False: ## 微课非创建者本人，或是微课已是发布状态，则404
+    if lesson.creater != request.user or lesson.is_draft == False:
         raise Http404()
         
-    return render_to_response('weelesson/draft.html',
-                              {'lesson':lesson},
-                              context_instance=RequestContext(request))
+    return render(request, 'weelesson/draft.html',
+                              {'lesson':lesson})
 
 def level(request):
     '''微课不同难度等级的显示'''
     _level = request.GET.get('level', '')
-    ## _lessons = get_list_or_404(WEELesson, is_draft=False)
-
-    ## lessons = _lessons.filter(level=_level) # 等级为4
     lessons = WEELesson.objects.published().filter(level=_level)
-    return render_to_response('weelesson/index.html',
-            {'lessons': lessons},
-            context_instance=RequestContext(request))
+    return render(request, 'weelesson/index.html',
+            {'lessons': lessons})
 
 def lesson(request, pk):
-   '''微课页面'''
+    '''微课页面'''
 
-   lesson = get_object_or_404(WEELesson, pk=pk)
+    lesson = get_object_or_404(WEELesson, pk=pk)
 
-   if lesson.is_draft == True and request.user != lesson.creater:
-       raise Http404()
+    if lesson.is_draft == True and request.user != lesson.creater:
+        raise Http404()
 
-   if request.GET.get('m', '') == 'full-reader':
-       return render_to_response('weelesson/full-read.html',
-                                 {'lesson': lesson,},
-                                 context_instance=RequestContext(request))
+    if request.GET.get('m', '') == 'full-reader':
+        return render(request, 'weelesson/full-read.html',
+                                  {'lesson': lesson,})
 
-   meets = lesson.weemeet_set.all() #得到前两个活动 可能有BUG
-   topics = Topics.objects.for_model(lesson) # 反相本课程下的讨论话题
-   studies = lesson.study_set.all()
-   ct = ContentType.objects.get(app_label='weelesson', model='weelesson')
-   try:
-       if request.user.is_authenticated():
-           fav = request.user.fav_set.get(object_pk=lesson.pk, content_type=ct)
-           if fav:
-               is_fav = True
-           else:
-               is_fav = False
-       else:
-           is_fav = False
-   except Fav.DoesNotExist:
-       is_fav = False
+    meets = lesson.weemeet_set.all()
+    topics = Topics.objects.for_model(lesson)
+    studies = lesson.study_set.all()
+    ct = ContentType.objects.get(app_label='weelesson', model='weelesson')
+    try:
+        if request.user.is_authenticated:
+            fav = request.user.fav_set.get(object_pk=lesson.pk, content_type=ct)
+            if fav:
+                is_fav = True
+            else:
+                is_fav = False
+        else:
+            is_fav = False
+    except Fav.DoesNotExist:
+        is_fav = False
 
-   favs = Fav.objects.for_model(lesson)
+    favs = Fav.objects.for_model(lesson)
 
-   return render_to_response('weelesson/lesson.html',
-           {'lesson': lesson, 'topics': topics, 'meets': meets, 'is_fav': is_fav, 'favs': favs, "studies": studies},
-           context_instance=RequestContext(request))
+    return render(request, 'weelesson/lesson.html',
+                  {'lesson': lesson, 'topics': topics, 'meets': meets, 'is_fav': is_fav, 'favs': favs, "studies": studies})
 
 @login_required
 @csrf_exempt
@@ -115,11 +105,10 @@ def create(request):
     else:
         form = TitleLessonForm(instance=lesson)
         
-    return render_to_response('weelesson/create.html',
+    return render(request, 'weelesson/create.html',
                               {'form': form,
                                'is_edit': False,
-                               'lesson':lesson},
-                              context_instance=RequestContext(request))
+                               'lesson':lesson})
 
 @login_required
 def info(request, pk):
@@ -133,35 +122,30 @@ def info(request, pk):
         form = WEELessonForm(request.POST, request.FILES, instance=lesson)
         if form.is_valid():
             o = form.save(commit=False)
-            ## o.creater = request.user
-            ## o.name = lesson.name
-            ## o.materials = lesson.materials
-            ## o.is_draft = False
             o.save()
 
-            return HttpResponseRedirect(reverse('weelesson.views.info', args=(o.pk,)))
+            return HttpResponseRedirect(reverse('lesson_info', args=(o.pk,)))
     else:
         form = WEELessonForm(instance=lesson)
 
-    return render_to_response('weelesson/info.html',
+    return render(request, 'weelesson/info.html',
             {'form': form,
              'lesson': lesson,
              'is_edit': is_edit
-             },
-            context_instance=RequestContext(request))
+             })
 
 @login_required
 def publish(request, pk):
-  '''发布微课'''
+    '''发布微课'''
 
-  lesson = get_object_or_404(WEELesson, pk=pk)
-  if lesson.creater == request.user:
-      lesson.is_draft = False
-      lesson.save()
-  else:
-      raise Http404()
+    lesson = get_object_or_404(WEELesson, pk=pk)
+    if lesson.creater == request.user:
+        lesson.is_draft = False
+        lesson.save()
+    else:
+        raise Http404()
 
-  return HttpResponseRedirect(reverse('weelesson.views.lesson', args=(lesson.pk, )))
+    return HttpResponseRedirect(reverse('weelesson_detail', args=(lesson.pk, )))
 
 @login_required
 def unpublish(request, pk):
@@ -198,11 +182,10 @@ def edit(request, pk):
     else:
         form = TitleLessonForm(instance=lesson)
         
-    return render_to_response('weelesson/create.html',
+    return render(request, 'weelesson/create.html',
                               {'form': form,
                                'is_edit': True,
-                               'lesson':lesson},
-                              context_instance=RequestContext(request))
+                               'lesson':lesson})
 
 @login_required
 def delete(request, pk):
@@ -212,5 +195,4 @@ def delete(request, pk):
     else:
         return HttpResponseForbidden()
 
-    return HttpResponseRedirect(reverse('profiles.views.manager_lesson', args=(request.user.username,)))
-
+    return HttpResponseRedirect(reverse('le_mg', args=(request.user.username,)))

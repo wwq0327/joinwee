@@ -1,20 +1,18 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# wwq @ 2013-10-22 21:21:01
+from django.urls import include, path, re_path
+from weelesson import views
+from topics import views as topics_views
+import fav.urls
 
-from django.conf.urls import *
-
-urlpatterns = patterns('',
-        url(r'^$', 'weelesson.views.index', name="lesson_index"),
-        url(r'^(?P<pk>\d+)/$', 'weelesson.views.lesson', name="weelesson_detail"),
-        url(r'^create/$', 'weelesson.views.create', name="lesson_create"),
-        url(r'^(?P<pk>\d+)/publish/info/$', 'weelesson.views.info', name="lesson_info"),
-        url(r'^(?P<pk>\d+)/publish/$', 'weelesson.views.publish', name="lesson_publish"),
-        url(r'^(?P<pk>\d+)/unpublish/$', 'weelesson.views.unpublish', name="lesson_unpublish"),
-        url(r'^(?P<pk>\d+)/edit/$', 'weelesson.views.edit', name="lesson_edit"),
-        url(r'^(?P<pk>\d+)/del/$', 'weelesson.views.delete', name="lesson_delete"),
-        url(r'^', include('fav.urls'), {'app': 'weelesson'}),
-        url(r'^(?P<pk>\d+)/draft/$', 'weelesson.views.draft', name="lesson_draft"),
-        url(r'^(?P<pk>\d+)/discuss/$', 'topics.views.all', name="t_all"), ##  by topics app
-)
-
+urlpatterns = [
+    path('', views.index, name='lesson_index'),
+    re_path(r'^(?P<pk>\d+)/$', views.lesson, name='weelesson_detail'),
+    path('create/', views.create, name='lesson_create'),
+    re_path(r'^(?P<pk>\d+)/publish/info/$', views.info, name='lesson_info'),
+    re_path(r'^(?P<pk>\d+)/publish/$', views.publish, name='lesson_publish'),
+    re_path(r'^(?P<pk>\d+)/unpublish/$', views.unpublish, name='lesson_unpublish'),
+    re_path(r'^(?P<pk>\d+)/edit/$', views.edit, name='lesson_edit'),
+    re_path(r'^(?P<pk>\d+)/del/$', views.delete, name='lesson_delete'),
+    path('', include(fav.urls), {'app': 'weelesson'}),
+    re_path(r'^(?P<pk>\d+)/draft/$', views.draft, name='lesson_draft'),
+    re_path(r'^(?P<pk>\d+)/discuss/$', topics_views.all, name='t_all'),
+]

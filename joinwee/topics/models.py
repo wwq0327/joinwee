@@ -1,18 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from django.contrib.contenttypes import generic
-from django.utils.translation import ugettext_lazy as _
+from django.contrib.contenttypes import fields
+from django.utils.translation import gettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.sites.models import Site
-from django.core import urlresolvers
+from django.urls import reverse
 from django.utils import timezone
-from django.utils.encoding import python_2_unicode_compatible
 from django.contrib.auth.models import User
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 
-from django.contrib.comments.models import Comment
-
-from notifications import notify
+from notifications.signals import notify
 
 class TopicsManager(models.Manager):
 
@@ -20,7 +16,7 @@ class TopicsManager(models.Manager):
     #    """
     #    QuerySet for all comments currently in the moderation queue.
     #    """
-    #    return self.get_query_set().filter(is_public=False, is_removed=False)
+    #    return         self.get_queryset().filter(is_public=False, is_removed=False)
 
     def for_model(self, model):
         """
@@ -28,9 +24,9 @@ class TopicsManager(models.Manager):
         a class).
         """
         ct = ContentType.objects.get_for_model(model)
-        qs = self.get_query_set().filter(content_type=ct)
+        qs = self.get_queryset().filter(content_type=ct)
         if isinstance(model, models.Model):
-            qs = qs.filter(object_pk=force_text(model._get_pk_val()))
+            qs = qs.filter(object_pk=force_str(model._get_pk_val()))
         return qs
     
     def for_object(self, model, pk):
@@ -38,7 +34,7 @@ class TopicsManager(models.Manager):
 
     def get_user_topic(self, model):
         ct = ContentType.objects.get(app_label=model, model=model)
-        qs = self.get_query_set().filter(content_type=ct)
+        qs = self.get_queryset().filter(content_type=ct)
 
         if model in ['weelesson', 'weemeet']:
             qs = qs.all()
@@ -59,15 +55,16 @@ class Topics(models.Model):
 
     # Content-object field
     content_type = models.ForeignKey(ContentType,
+            on_delete=models.CASCADE,
             verbose_name=_('content type'),
             related_name="content_type_set_for_%(class)s")
     object_pk = models.TextField('object_ID')
-    content_object = generic.GenericForeignKey(ct_field="content_type", fk_field="object_pk")
+    content_object = fields.GenericForeignKey(ct_field="content_type", fk_field="object_pk")
 
     # Metadata about the comment
     #site = models.ForeignKey(Site)
     
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(u'主题', max_length=128)
     comment = models.TextField(u'内容', max_length=1000, help_text=u'支持makdown语法')
     pub_date = models.DateTimeField(auto_now_add=True)
@@ -77,12 +74,11 @@ class Topics(models.Model):
     class Meta:
         ordering = ['-id']
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('t_topic', (), {'pk': self.pk})
+        return reverse('t_topic', kwargs={'pk': self.pk})
 
 # 当用户发起一个新的讨论时，系统会自动将一条消息发送给所属微课的作者
 def topic_handler(sender, instance, created, **kwargs):
@@ -126,6 +122,6 @@ def comment_handler(sender, instance, created, **kwargs):
 from django.db.models.signals import post_save, post_delete
 
 post_save.connect(topic_handler, sender=Topics)
-post_save.connect(comment_handler, sender=Comment)
+#post_save.connect(comment_handler, sender=Comment)
 # post_delete.connect(topic_del_handler, sender=Topics)
    

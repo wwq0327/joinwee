@@ -3,7 +3,7 @@
 # wwq @ 2013-10-31 20:47:59
 
 from django import template
-from dango.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.models import ContentType
 from weelesson.models import WEELesson
 from weemeet.models import WEEMeet
 

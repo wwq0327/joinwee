@@ -22,7 +22,7 @@ class PinYin(object):
         if not os.path.exists(self.dict_file):
             raise IOError("NotFoundFile")
 
-        with file(self.dict_file) as f_obj:
+        with open(self.dict_file) as f_obj:
             for f_line in f_obj.readlines():
                 try:
                     line = f_line.split('    ')
@@ -35,14 +35,13 @@ class PinYin(object):
         result = []
         alnum = []
 
-        if not isinstance(string, unicode):
-            string = string.decode("utf-8")
+        if not isinstance(string, str):
+            string = str(string, "utf-8")
 
         for char in string.replace(' ', ''):
             key = '%X' % ord(char)
             word = self.word_dict.get(key, char).split()[0]
             if len(word) == 1:
-                # 拼音都有声调 长度大于1
                 alnum.append(word)
             else:
                 if alnum:
@@ -66,14 +65,14 @@ class PinYin(object):
 if __name__ == "__main__":
     test = PinYin()
     string = "钓鱼岛是中国的"
-    print "in: %s" % string
-    print "out: %s" % str(test.hanzi2pinyin(string=string))
-    print "out: %s" % test.hanzi2pinyin_split(string=string, split="_")
+    print("in: %s" % string)
+    print("out: %s" % str(test.hanzi2pinyin(string=string)))
+    print("out: %s" % test.hanzi2pinyin_split(string=string, split="_"))
     string = "hello world 123"
-    print "in: %s" % string
-    print "out: %s" % str(test.hanzi2pinyin(string=string))
-    print "out: %s" % test.hanzi2pinyin_split(string=string, split="_")
+    print("in: %s" % string)
+    print("out: %s" % str(test.hanzi2pinyin(string=string)))
+    print("out: %s" % test.hanzi2pinyin_split(string=string, split="_"))
     string = "hello 中国 123"
-    print "in: %s" % string
-    print "out: %s" % str(test.hanzi2pinyin(string=string))
-    print "out: %s" % test.hanzi2pinyin_split(string=string, split="_")
+    print("in: %s" % string)
+    print("out: %s" % str(test.hanzi2pinyin(string=string)))
+    print("out: %s" % test.hanzi2pinyin_split(string=string, split="_"))

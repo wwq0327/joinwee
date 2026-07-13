@@ -1,12 +1,8 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# wwq @ 2013-10-22 21:21:01
+from django.urls import path
+from home import views
 
-from django.conf.urls import *
-
-urlpatterns = patterns('',
-        url(r'^$', 'home.views.index'),
-        url(r'^succ/$', 'home.views.succ'),
-        url(r'^about/$', 'home.views.about'),
-)
-
+urlpatterns = [
+    path('', views.index, name='home_index'),
+    path('succ/', views.succ, name='home_succ'),
+    path('about/', views.about, name='home_about'),
+]

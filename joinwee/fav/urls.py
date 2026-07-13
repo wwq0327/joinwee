@@ -1,12 +1,9 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# wwq @ 2013-10-30 20:39:43
+from django.urls import re_path
+from fav import views
 
-from django.conf.urls import *
-
-urlpatterns = patterns('',
-        url(r'^(?P<pk>\d+)/fav/$', 'fav.views.fav'),
-        url(r'^(?P<pk>\d+)/unfav/$', 'fav.views.unfav'),
-        url(r'^(?P<pk>\d+)/join/$', 'fav.views.join'),
-        url(r'^(?P<pk>\d+)/unjoin/$', 'fav.views.unjoin'),
-)        
+urlpatterns = [
+    re_path(r'^(?P<pk>\d+)/fav/$', views.fav, name='fav'),
+    re_path(r'^(?P<pk>\d+)/unfav/$', views.unfav, name='unfav'),
+    re_path(r'^(?P<pk>\d+)/join/$', views.join, name='join'),
+    re_path(r'^(?P<pk>\d+)/unjoin/$', views.unjoin, name='unjoin'),
+]

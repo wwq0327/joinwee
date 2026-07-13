@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from pinyin.pinyin import PinYin
+from .pinyin.pinyin import PinYin
     
 def string2py(string):
     py = PinYin()
@@ -9,9 +9,9 @@ def string2py(string):
     return ''.join(result)
 
 if __name__ == '__main__':
-    print string2py('你好')
-    print string2py('a你好 ， 呀')
-    print string2py('hello, The world!')
+    print(string2py('你好'))
+    print(string2py('a你好 ， 呀'))
+    print(string2py('hello, The world!'))
     
 
 '''

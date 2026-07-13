@@ -32,17 +32,17 @@ $(document).ready(function() {
 
 <div class="media">
   {% if t.user.profile.mugshot %}
-  <a class="pull-left" href="{% url 'userena_profile_detail' t.user.username %}">
+  <a class="pull-left" href="{% url 'profile_detail' t.user.username %}">
     <img src="{{t.user.profile.mugshot|thumbnail_url:'com_header'}}">
 
   </a>
   {% else %}
-  <a class="pull-left" href="{% url 'userena_profile_detail' t.user.username %}">
+  <a class="pull-left" href="{% url 'profile_detail' t.user.username %}">
     <img src="{{ t.user.profile.get_mugshot_url }}" height="64" width="64">
   </a>
   {% endif %}
   <div class="media-body">
-    <small class="media-heading info-border"><a href="{% url 'userena_profile_detail' t.user.username %}">{{ t.user.profile.get_nick_name }}</a> 发布时间： {{ t.pub_date|weetimesince:"Y-m-d H:i" }}，共有 {% get_hit_count for t %} 人浏览了这个讨论
+    <small class="media-heading info-border"><a href="{% url 'profile_detail' t.user.username %}">{{ t.user.profile.get_nick_name }}</a> 发布时间： {{ t.pub_date|weetimesince:"Y-m-d H:i" }}，共有 {% get_hit_count for t %} 人浏览了这个讨论
       {% if request.user == t.user %}
       | <a href="{% url 't_edit' t.id %}">编辑</a>
       | <a class="rm" href="{% url 't_delete' t.id %}">删除</a>

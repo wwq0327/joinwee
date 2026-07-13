@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.urls import reverse
 from django.contrib.auth.models import User
 from easy_thumbnails.fields import ThumbnailerImageField
 import datetime, time
@@ -20,7 +21,7 @@ class WEEMeet(models.Model):
 
     ## lesson = models.ForeignKey(WEELesson)
     lesson = models.ForeignKey(WEELesson, on_delete=models.SET(get_sentinel_lesson))
-    creater = models.ForeignKey(User)
+    creater = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     city = models.CharField(u'所在城市', max_length=30,
@@ -40,12 +41,11 @@ class WEEMeet(models.Model):
     class Meta:
         ordering = ['-id']
 
-    def __unicode__(self):
+    def __str__(self):
         return 'Meet: %s, Lesson: %s' % (self.pk, self.lesson.name)
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('meet_detail', (), {'pk': self.pk})
+        return reverse('meet_detail', kwargs={'pk': self.pk})
 
     def get_time(self):
         state = ['筹备中', '已结束', '进行中']

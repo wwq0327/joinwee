@@ -1,7 +1,7 @@
 {% load url from future %}
 
 <div class="page-header-1 {% if not notice.unread %}text-muted{% endif %}">
-  <a href="{% url 'userena_profile_detail' notice.actor %}">{{ notice.actor.profile.get_nick_name }}</a>
+  <a href="{% url 'profile_detail' notice.actor %}">{{ notice.actor.profile.get_nick_name }}</a>
   {% if notice.target %}
   在您的《
   <a href="{{ notice.action_object.get_absolute_url }}">{{ notice.action_object.name }}</a>

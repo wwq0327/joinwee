@@ -51,7 +51,7 @@
     {% get_comment_count for topics.topics topic.id as comment_count %}
     <tr>
       <td><a href="{{ topic.get_absolute_url }}" title="{{ topic.title }}">{{ topic.title|slice:"42" }}</a></td>
-      <td><a href="{% url 'userena_profile_detail' topic.user.username %}">{{ topic.user.profile.get_nick_name }}</a></td>
+      <td><a href="{% url 'profile_detail' topic.user.username %}">{{ topic.user.profile.get_nick_name }}</a></td>
       <td>{{ comment_count }}条回应</td>
       <td>{{ topic.pub_date|weetimesince:"Y-m-d H:i" }}</td>
     </tr>

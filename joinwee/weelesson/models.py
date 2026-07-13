@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.db.models import Q
+from django.urls import reverse
 
 from django.contrib.auth.models import User
 
 from easy_thumbnails.fields import ThumbnailerImageField
 
-from brands.models import Brands
+#from brands.models import Brands
 from topics.models import Topics
 from fav.models import Fav
 from weelesson.managers import LessonManager
@@ -27,7 +28,7 @@ class WEELesson(models.Model):
                                   blank=True,
                                   null=True,
                                   help_text=u'图片尺寸请不要小于300x200px')
-    creater = models.ForeignKey(User)
+    creater = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     desc = models.CharField(u'微课简介',
@@ -48,12 +49,11 @@ class WEELesson(models.Model):
     class Meta:
         ordering = ['-id']
 
-    def __unicode__(self):
+    def __str__(self):
         return 'Lesson: %s' % self.name
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('weelesson_detail', (), {'pk': self.pk})
+        return reverse('weelesson_detail', kwargs={'pk': self.pk})
 
     @property
     def get_pre_lesson(self):
@@ -75,11 +75,7 @@ class WEELesson(models.Model):
     @property
     def get_brands(self):
         '''获取该课程的品牌名实例'''
-        bs = self.creater.brands_set.only()
-        if bs:
-            return bs[0]
-        else:
-            return bs
+        return None
     @property
     def get_meet(self):
         '''获取本课程的全部微聚'''
@@ -115,10 +111,10 @@ class WEELesson(models.Model):
 
 class FineLesson(models.Model):
     '''精品微课'''
-    lesson = models.ForeignKey(WEELesson, unique=True)
+    lesson = models.ForeignKey(WEELesson, on_delete=models.CASCADE, unique=True)
     created = models.DateTimeField(auto_now_add=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return "FindLesson %s" % self.lesson.name
 
 def get_finelesson_count(user):

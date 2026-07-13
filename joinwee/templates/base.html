@@ -8,12 +8,8 @@
     <link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.ico">
     <meta name="keywords" content="wee, joinwee, 开放教育， 微课， 微聚， 开放学习机会">
     <meta name="author" content="joinwee">
-<<<<<<< HEAD
-
-	<meta property="wb:webmaster" content="3dac159b52c2f689" />
-=======
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
->>>>>>> dev
+    <meta property="wb:webmaster" content="3dac159b52c2f689" />
     <title>{% block title %}{% endblock %}--WEE-Beta 用智慧创造好玩有趣的开放学习机会</title>
     <script src="{{ MEDIA_URL }}js/jquery-1.10.2.min.js"></script>
     <!-- Bootstrap core CSS -->
@@ -50,7 +46,7 @@
             <ul class="nav navbar-nav">
               <li><a href="/">首页</a></li>
               <li><a href="{% url 'weelesson.views.index' %}">微课</a></li>
-              <li><a href="{% url 'userena_profile_list' %}">学友</a></li>
+              <li><a href="#">学友</a></li>
 	      <li><a href="{% url 'blog_index' %}">博客</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -82,22 +78,22 @@
                   <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a href="{% url 'userena_profile_detail' user.username %}">个人主页</a></li>
+                  <li><a href="{% url 'profile_detail' user.username %}">个人主页</a></li>
                   <li><a href="{% url 'le_mg' user.username %}">管理微课</a></li>
                   <li><a href="{% url 'userena_profile_edit' user.username %}">修改信息</a></li>
 		  {% if user.username|ef %} {# 判断用户是否激活 #}
-                  <li><a href="{% url 'userena_password_change' user.username %}">修改密码</a></li>
-                  <li><a href="{% url 'userena_email_change' user.username %}">修改信箱</a></li>
+                  <li><a href="{% url 'account_change_password' %}">修改密码</a></li>
+                  <li><a href="{% url 'account_email' %}">修改信箱</a></li>
 		  {% else %}
 		  <li><a href="{% url 'new_social' %}">邮箱验证</a></li>
 		  {% endif %}
 		  <li><a href="{% url 'sns_link' %}">社交帐号</a>
-                  <li><a href="{% url 'userena_signout' %}">退出</a></li>
+                  <li><a href="{% url 'account_logout' %}">退出</a></li>
 		</ul>
 	      </li>
               {% else %}
-              <li><a href="{% url 'userena_signup' %}">注册</a></li>
-              <li><a href="{% url 'userena_signin' %}">登录</a></li>
+              <li><a href="{% url 'account_signup' %}">注册</a></li>
+              <li><a href="{% url 'account_login' %}">登录</a></li>
               {% endif %}
             </ul>
           </div><!--/.nav-collapse -->

@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404
-from django.template import RequestContext
-from django.core.urlresolvers import reverse
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
@@ -32,9 +31,8 @@ def create(request, pk):
     else:
         form = StudyForm()
 
-    return render_to_response('study/create.html',
-                              {'form': form},
-                              context_instance=RequestContext(request))
+    return render(request, 'study/create.html',
+                              {'form': form})
 
 
 def detail(request, pk):
@@ -43,7 +41,7 @@ def detail(request, pk):
     study = get_object_or_404(Study, pk=pk)
     ct = ContentType.objects.get(app_label='study', model='study')
     try:
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
            fav = request.user.fav_set.get(object_pk=study.pk, content_type=ct)
 
            if fav:
@@ -56,7 +54,7 @@ def detail(request, pk):
         is_fav = False
 
     try:
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             join = request.user.join_set.get(object_pk=study.pk, content_type=ct)
             if join:
                 is_join = True
@@ -71,14 +69,13 @@ def detail(request, pk):
     favs = Fav.objects.for_model(study)
     joins = Join.objects.for_model(study)
     point = "%.2f" % (float(joins.count()/float(study.number))*100) #取两位小数
-    return render_to_response("study/detail.html",
+    return render(request, "study/detail.html",
                               {"study": study,
                                "is_fav": is_fav,
                                "is_join": is_join,
                                "joins": joins,
                                "favs": favs,
-                               "point": point},
-                              context_instance=RequestContext(request))
+                               "point": point})
 
 @login_required
 def edit(request, pk):
@@ -95,7 +92,6 @@ def edit(request, pk):
     else:
         form = StudyForm(instance=study)
 
-    return render_to_response('study/create.html',
-            {'form': form,'is_edit': True, 'study': study},
-            context_instance=RequestContext(request))
+    return render(request, 'study/create.html',
+            {'form': form,'is_edit': True, 'study': study})
 

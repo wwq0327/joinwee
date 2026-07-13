@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.urls import reverse
 from django.contrib.auth.models import User
 
 from weelesson.models import WEELesson
@@ -7,8 +8,8 @@ from weelesson.models import WEELesson
 class Study(models.Model):
     """微课研修模型"""
     
-    lesson = models.ForeignKey(WEELesson) #, on_delete=models.SET(get_sentinel_lesson))
-    creater = models.ForeignKey(User)
+    lesson = models.ForeignKey(WEELesson, on_delete=models.CASCADE)
+    creater = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     number = models.IntegerField(u'人数规模', max_length=5)
@@ -25,12 +26,11 @@ class Study(models.Model):
     class Meta:
         ordering = ['-id']
 
-    def __unicode__(self):
+    def __str__(self):
         return self.lesson.name
         
-    @models.permalink
     def get_absolute_url(self):
-        return ('study_detail', (), {'pk': self.pk})
+        return reverse('study_detail', kwargs={'pk': self.pk})
 
     @property
     def get_join(self):

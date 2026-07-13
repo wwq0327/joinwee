@@ -33,17 +33,17 @@
       </h2>
       <div class="media">
         {% if fav.user.profile.mugshot %}
-          <a href="{% url 'userena_profile_detail' study.creater.username %}" class="pull-left">
+          <a href="{% url 'profile_detail' study.creater.username %}" class="pull-left">
             <img src="{{ study.creater.profile.mugshot|thumbnail_url:'com_header' }}">
           </a>
         {% else %}
-          <a href="{% url 'userena_profile_detail' study.creater.username %}" class="pull-left">
+          <a href="{% url 'profile_detail' study.creater.username %}" class="pull-left">
             <img src="{{ study.creater.profile.get_mugshot_url }}" width="64" height="64">
           </a>
         {% endif %}
 
         <div class="media-body">
-          <h2 style="margin-top: 0; padding-top: 0;"><a href="{% url 'userena_profile_detail' study.creater.username %}">
+          <h2 style="margin-top: 0; padding-top: 0;"><a href="{% url 'profile_detail' study.creater.username %}">
               {{ study.creater.profile.get_nick_name }}
             </a>正在召集<span class="text-primary">{{ study.number }}</span>人一起研修
 	{% if request.user == study.creater %}
@@ -112,18 +112,18 @@
         {% for fav in joins %}
           <div class="col-sm-6 col-md-1">
             {% if fav.user.profile.mugshot %}
-              <a href="{% url 'userena_profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
+              <a href="{% url 'profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
                 <img src="{{ fav.user.profile.mugshot|thumbnail_url:'com_header' }}">
               </a>
             {% else %}
 
-              <a href="{% url 'userena_profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
+              <a href="{% url 'profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
                 <img src="{{ fav.user.profile.get_mugshot_url }}" width="64" height="64">
               </a>
 
             {% endif %}
             <p style="width:64px; overlower: hidden;">
-              <a href="{% url 'userena_profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
+              <a href="{% url 'profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
                 <div class="you-header"><small>{{ fav.user.profile.get_nick_name }}</small></div>
               </a>
             </p>
@@ -156,7 +156,7 @@
         <span>浏览数：{% get_hit_count for lesson %}</span>
       </p>
       <p class="lesson-fun">
-        <small>由<a href="{% url 'userena_profile_detail' lesson.creater.username %}">{{ lesson.creater.profile.get_nick_name }}</a>创建于{{ lesson.created|date:"Y-m-d" }}</small></p>
+        <small>由<a href="{% url 'profile_detail' lesson.creater.username %}">{{ lesson.creater.profile.get_nick_name }}</a>创建于{{ lesson.created|date:"Y-m-d" }}</small></p>
     </div>
   </div>
   {% endwith %}
@@ -169,18 +169,18 @@
         <div class="col-sm-6 col-md-3">
           {% if fav.user.profile.mugshot %}
 
-            <a href="{% url 'userena_profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
+            <a href="{% url 'profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
               <img src="{{ fav.user.profile.mugshot|thumbnail_url:'com_header' }}">
             </a>
           {% else %}
 
-            <a href="{% url 'userena_profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
+            <a href="{% url 'profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
               <img src="{{ fav.user.profile.get_mugshot_url }}" width="64" height="64">
             </a>
 
           {% endif %}
           <p style="width:64px; overlower: hidden;">
-            <a href="{% url 'userena_profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
+            <a href="{% url 'profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
               <div class="you-header"><small>{{ fav.user.profile.get_nick_name }}</small></div>
             </a>
           </p>

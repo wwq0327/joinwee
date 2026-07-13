@@ -18,7 +18,7 @@
       <span>浏览数：{% get_hit_count for lesson %}</span>
     </p>
     <p class="lesson-fun">
-      <small>由<a href="{% url 'userena_profile_detail' lesson.creater.username %}">{{ lesson.creater.profile.get_nick_name }}</a>创建于{{ lesson.created|date:"Y-m-d" }}</small></p>
+      <small>由<a href="{% url 'profile_detail' lesson.creater.username %}">{{ lesson.creater.profile.get_nick_name }}</a>创建于{{ lesson.created|date:"Y-m-d" }}</small></p>
   </div>
 </div>
 {% else %}

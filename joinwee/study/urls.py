@@ -1,8 +1,10 @@
-from django.conf.urls import *
+from django.urls import include, path, re_path
+from study import views
+import fav.urls
 
-urlpatterns = patterns('',
-                       url(r'^(?P<pk>\d+)/create/$', 'study.views.create', name="study_create"),
-                       url(r'^(?P<pk>\d+)/$', 'study.views.detail', name="study_detail"),
-                       url(r'^(?P<pk>\d+)/edit/$', 'study.views.edit', name="study_edit"),
-                       url(r'^', include('fav.urls'), {'app': 'study'}),
-)                       
+urlpatterns = [
+    re_path(r'^(?P<pk>\d+)/create/$', views.create, name='study_create'),
+    re_path(r'^(?P<pk>\d+)/$', views.detail, name='study_detail'),
+    re_path(r'^(?P<pk>\d+)/edit/$', views.edit, name='study_edit'),
+    path('', include(fav.urls), {'app': 'study'}),
+]

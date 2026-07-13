@@ -1,6 +1,7 @@
-from django.conf.urls import *
+from django.urls import path, re_path
+from blog import views
 
-urlpatterns = patterns('',
-                       url('^$', 'blog.views.index', name="blog_index"),
-                       url('^p/(?P<slug>[^\.]+)/$', 'blog.views.post', name="blog_post"),
-)                       
+urlpatterns = [
+    path('', views.index, name='blog_index'),
+    re_path(r'^p/(?P<slug>[^\.]+)/$', views.post, name='blog_post'),
+]

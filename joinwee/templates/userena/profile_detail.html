@@ -61,7 +61,7 @@
                     <h3 class="media-heading"><a href="{{ lesson.get_absolute_url }}" title="{{ lesson.name }}">{{ lesson.name|slice:":30" }}</a></h3>
 		    <div class="mn-info">
                       <small>
-                        发布时间：{{ lesson.created|date:"Y/m/d" }}  作者：<a href="{% url 'userena_profile_detail' lesson.creater.username %}">{{ lesson.creater.profile.get_nick_name }}</a> 学友：{{ lesson.get_favs|length }}  讨论：{{ lesson.get_topics|length }}
+                        发布时间：{{ lesson.created|date:"Y/m/d" }}  作者：<a href="{% url 'profile_detail' lesson.creater.username %}">{{ lesson.creater.profile.get_nick_name }}</a> 学友：{{ lesson.get_favs|length }}  讨论：{{ lesson.get_topics|length }}
                       </small>
                   </div>
                     <div class="lesson-content">

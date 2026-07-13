@@ -1,10 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# wwq @ 2013-10-22 21:21:01
+from django.urls import re_path
+from tags import views
 
-from django.conf.urls import *
-
-urlpatterns = patterns('',
-        url(r'^(?P<tag>[^/]+)/$', 'tags.views.tag_item', name="tag_item"),
-)
-
+urlpatterns = [
+    re_path(r'^(?P<tag>[^/]+)/$', views.tag_item, name='tag_item'),
+]

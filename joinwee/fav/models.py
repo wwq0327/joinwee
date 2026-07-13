@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes import fields
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 #from weelesson.models import WEELesson
 #from weemeet.models import WEEMeet
 
@@ -14,7 +14,7 @@ class FavManager(models.Manager):
     #    """
     #    QuerySet for all comments currently in the moderation queue.
     #    """
-    #    return self.get_query_set().filter(is_public=False, is_removed=False)
+    #    return self.get_queryset().filter(is_public=False, is_removed=False)
 
     def for_model(self, model):
         """
@@ -22,9 +22,9 @@ class FavManager(models.Manager):
         a class).
         """
         ct = ContentType.objects.get_for_model(model)
-        qs = self.get_query_set().filter(content_type=ct)
+        qs = self.get_queryset().filter(content_type=ct)
         if isinstance(model, models.Model):
-            qs = qs.filter(object_pk=force_text(model._get_pk_val()))
+            qs = qs.filter(object_pk=force_str(model._get_pk_val()))
         return qs
 
     def for_object(self, model, pk):
@@ -33,7 +33,7 @@ class FavManager(models.Manager):
     def get_user_fav(self, model):
         '''显示用户收藏的model条目'''
         ct = ContentType.objects.get(app_label=model, model=model)
-        qs = self.get_query_set().filter(content_type=ct)
+        qs = self.get_queryset().filter(content_type=ct)
 
         if model in ['weelesson', 'weemeet']:
             qs = qs.all()
@@ -50,12 +50,13 @@ class FavManager(models.Manager):
 class Fav(models.Model):
     '''关注或加入微课'''
     content_type = models.ForeignKey(ContentType,
+            on_delete=models.CASCADE,
             verbose_name = u'内容类型',
             related_name="content_type_set_for_%(class)s")
     object_pk = models.TextField('object_ID')
-    content_object = generic.GenericForeignKey(ct_field="content_type", fk_field="object_pk")
+    content_object = fields.GenericForeignKey(ct_field="content_type", fk_field="object_pk")
 
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     pub_date = models.DateTimeField(auto_now_add=True)
     objects = FavManager()
 
@@ -66,12 +67,13 @@ class Fav(models.Model):
 class Join(models.Model):
     '''参与聚会'''
     content_type = models.ForeignKey(ContentType,
+            on_delete=models.CASCADE,
             verbose_name=u'内容类型',
             related_name="content_type_set_for_%(class)s")
     object_pk = models.TextField('object_ID')
-    content_object = generic.GenericForeignKey(ct_field="content_type", fk_field="object_pk")
+    content_object = fields.GenericForeignKey(ct_field="content_type", fk_field="object_pk")
 
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     pub_date = models.DateTimeField(auto_now_add=True)
     objects = FavManager()
 

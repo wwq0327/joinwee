@@ -1,57 +1,40 @@
-from django.conf.urls import patterns, include, url, handler404, handler500
+from django.urls import include, path, re_path
 from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
-admin.autodiscover()
+from django.views.generic import TemplateView, RedirectView
 
-import notifications
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),
+    path('accounts/', include('profiles.urls')),
+    path('', include('home.urls')),
+    path('lesson/', include('weelesson.urls')),
+    path('meet/', include('weemeet.urls')),
+    path('study/', include('study.urls')),
+    path('discuss/', include('topics.urls')),
+    path('blog/', include('blog.urls')),
+    path('notifications/', include('notifications.urls', namespace='notifications')),
+]
 
-urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^comments/', include('django.contrib.comments.urls')),
-    url(r'^accounts/', include('profiles.urls')),
-    url('^', include('home.urls')),
-    url(r'^lesson/', include('weelesson.urls')),
-    url(r'^meet/', include('weemeet.urls')),
-    url(r'^study/', include('study.urls')),
-    url(r'^discuss/', include('topics.urls')),
-    url(r'^blog/', include('blog.urls')),
-    url(r'^notifications/', include(notifications.urls)),
-#    url(r'^tag/', include('tags.urls')),
-    url(r'', include('social_auth.urls')),
-    url(r'^oauth/', include('profiles.auth_urls')),
-)
-
-#hitcount
 from hitcount.views import update_hit_count_ajax
 
-urlpatterns += patterns('',
-                        url(r'^ajax/hit/$',
-                            update_hit_count_ajax,
-                            name='hitcount_update_ajax'),
-)
+urlpatterns += [
+    path('ajax/hit/', update_hit_count_ajax, name='hitcount_update_ajax'),
+]
 
-# robots.txt
+urlpatterns += [
+    re_path(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
+]
 
-from django.views.generic import TemplateView
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-urlpatterns += patterns('',
-        url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
-)            
+urlpatterns += [
+    re_path(r'^favicon\.ico$', RedirectView.as_view(url=settings.MEDIA_URL + 'img/favicon.ico')),
+]
 
-media_url = settings.MEDIA_URL.lstrip('/').rstrip('/')
-urlpatterns += patterns('',
-        (r'^%s/(?P<path>.*)$' % media_url, 'django.views.static.serve',
-            {
-                'document_root': settings.MEDIA_ROOT,
-                }),
-)
+from abugs.views import page_not_found, server_error, denied
 
-from django.views.generic import RedirectView
-
-urlpatterns += patterns('',
-    (r'^favicon\.ico$', RedirectView.as_view(url=settings.MEDIA_URL + 'img/favicon.ico'))
-)
-
-handler404 = 'abugs.views.page_not_found'
-handler500 = 'abugs.views.server_error'
-handler403 = 'abugs.views.denied'
+handler404 = page_not_found
+handler500 = server_error
+handler403 = denied

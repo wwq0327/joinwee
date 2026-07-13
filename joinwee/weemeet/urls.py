@@ -1,15 +1,11 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-# wwq @ 2013-10-22 21:21:01
+from django.urls import include, path, re_path
+from weemeet import views
+import fav.urls
 
-from django.conf.urls import *
-
-urlpatterns = patterns('',
-        #url(r'^$', 'weemeet.views.index', name="meet_index"),
-        url(r'^(?P<pk>\d+)/$', 'weemeet.views.detail', name="meet_detail"),
-        url(r'^(?P<pk>\d+)/create/$', 'weemeet.views.create', name="meet_create"),
-        url(r'^(?P<pk>\d+)/edit/$', 'weemeet.views.edit', name="meet_edit"),
-        url(r'^(?P<pk>\d+)/del/$', 'weemeet.views.delete', name="meet_delete"),
-        url(r'^', include('fav.urls'), {'app': 'weemeet'}),
-)
-
+urlpatterns = [
+    re_path(r'^(?P<pk>\d+)/$', views.detail, name='meet_detail'),
+    re_path(r'^(?P<pk>\d+)/create/$', views.create, name='meet_create'),
+    re_path(r'^(?P<pk>\d+)/edit/$', views.edit, name='meet_edit'),
+    re_path(r'^(?P<pk>\d+)/del/$', views.delete, name='meet_delete'),
+    path('', include(fav.urls), {'app': 'weemeet'}),
+]
