@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
-    <meta http-equiv="Content Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="description" content="我们是开放教育的设计与践行者，用我们的智慧创造更多好玩有趣的“三人行必有我师”的开放学习机会">
     <link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.ico">
     <meta name="keywords" content="wee, joinwee, 开放教育， 微课， 微聚， 开放学习机会">
@@ -48,6 +48,8 @@
               <li><a href="{% url 'lesson_index' %}">微课</a></li>
               <li><a href="{% url 'profile_list' %}">学友</a></li>
 	      <li><a href="{% url 'blog_index' %}">博客</a></li>
+	      <li><a href="{% url 'meet_index' %}">微聚</a></li>
+	      <li><a href="{% url 'discuss_index' %}">讨论</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li>
@@ -111,7 +113,7 @@
 
     <div id="footer">
       <div class="container">
-        <class="row">
+        <div class="row">
           <div class="col-xs-8 col-lg-8">
             <p class="text-muted">
 	      <a href="/about/">关于我们</a>
