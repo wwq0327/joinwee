@@ -12,3 +12,4 @@ django.pid
 __pycache__/
 
 settings.py.bak*
+*.sqlite3
