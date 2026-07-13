@@ -110,7 +110,6 @@ code {
 
 .lesson-content {
   font-size: 16px;
-  font-weight: 100;
   line-height: 1.8em;
   color: #2f2f2f;
 }
@@ -147,7 +146,6 @@ code {
   display: block;
   color: #4e4e4e;
   text-decoration: none;
-  font-weight: 500;
   font-size: 1em;
   white-space: nowrap;
   overflow: hidden;
@@ -234,7 +232,6 @@ blockquote p {
   font-size: 16px;
   color: #2f2f2f;
   line-height: 24px;
-  font-weight: 100;
   word-break: break-word;
 }
 
@@ -267,7 +264,6 @@ blockquote {
 }
 
 .topic-content {
-  font-weight: 100;
   line-height: 1.5em;
   color: #2f2f2f;
 }
@@ -297,7 +293,6 @@ blockquote {
   padding: 10px 10px 0 0;
   overflow: hidden;
   font-size: 1.8em;
-  font-weight: 700;
 }
 
 .page-header-1 {
@@ -602,7 +597,6 @@ blockquote {
 .profile-num {
   padding-top: 5px;
   color: #FFF;
-  font-weight: 600;
 }
 
 .profile-info {
