@@ -1,32 +1,24 @@
 {% extends "topics/sub_base.html" %}
-{% block title %}{% if is_edit %}编辑讨论{% else %} 发起一个讨论{% endif %}{% endblock %}
+{% load bootstrap3 %}
+
+{% block title %}{% if is_edit %}编辑讨论{% else %}发起一个讨论{% endif %}{% endblock %}
 
 {% block meet_main %}
-<form enctype="multipart/form-data" action="" method="post" class="form-horizontal">
-        {% csrf_token %}
-        <fieldset>
-        {% if is_edit %}
-        <legend>编辑你的讨论：{{ m.title }}</legend>
-        {% else %}
-        <legend>发起《<a href="{{ m.get_absolute_url }}">{{ m.name }}</a>》的讨论</legend>
-        {% endif %}
-        {{ form.non_field_errors }}
-        {% for field in form %}
- 
-        <div class="form-group">
-                <label for="id_{{ field.name}}" class="col-lg-2 control-label">{{ field.label_tag }}</label>
-                <div class="col-lg-10">{{ field }}
-		  
-                </div>
-       {{ field.errors }}
-        </div>
-        {% endfor %}
-        <div class="form-group">
-                <div class="col-lg-offset-9 col-lg-3">
-                        <button type="submit" class="btn btn-primary">{% if is_edit %}提交修改{% else %}发起讨论{% endif %}</button>
-        </div>
+<form action="" method="post" class="form-horizontal">
+  {% csrf_token %}
+  <fieldset>
+    {% if is_edit %}
+    <legend>编辑你的讨论：{{ m.title }}</legend>
+    {% else %}
+    <legend>发起《<a href="{{ m.get_absolute_url }}">{{ m.name }}</a>》的讨论</legend>
+    {% endif %}
+    {% bootstrap_form form layout='horizontal' %}
+    <div class="form-group">
+      <div class="col-lg-offset-9 col-lg-3">
+        <button type="submit" class="btn btn-primary">{% if is_edit %}提交修改{% else %}发起讨论{% endif %}</button>
+      </div>
     </div>
-    </fieldset>
+  </fieldset>
 </form>
 {% endblock %}
 
@@ -37,4 +29,3 @@
 >回 <a href="{{ m.get_absolute_url }}">{{ m.name }}</a>
 {% endif %}
 {% endblock %}
-
