@@ -8,6 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('accounts/', include('profiles.urls')),
+    path('oauth/', include('profiles.auth_urls')),
     path('', include('home.urls')),
     path('lesson/', include('weelesson.urls')),
     path('meet/', include('weemeet.urls')),
@@ -17,10 +18,8 @@ urlpatterns = [
     path('notifications/', include('notifications.urls', namespace='notifications')),
 ]
 
-from hitcount.views import update_hit_count_ajax
-
 urlpatterns += [
-    path('ajax/hit/', update_hit_count_ajax, name='hitcount_update_ajax'),
+    path('hitcount/', include('hitcount.urls', namespace='hitcount')),
 ]
 
 urlpatterns += [

@@ -1,5 +1,4 @@
 {% extends "notifications/sub_base.html" %}
-{% load pagination_tags %}
 
 {% block title %}消息{% endblock %}
 {% block notify_main %}
@@ -14,7 +13,6 @@
       </small>
     </h3>
     {% if notifications %}
-    {% autopaginate notifications 25 %}
     <div class="notifications">
       {% for notice in notifications %}
       {% include 'notifications/notice.html' %}
@@ -23,7 +21,6 @@
     {% else %}
     <strong>你暂时还没有收到任何消息</strong>
     {% endif %}
-    {% paginate %}
   </div>
 </div>
 

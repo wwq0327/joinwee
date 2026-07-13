@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import hashlib
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
@@ -45,6 +47,12 @@ class Profile(models.Model):
             return self.nick_name
         else:
             return self.user.username
+
+    def get_mugshot_url(self):
+        if self.mugshot:
+            return self.mugshot.url
+        email_hash = hashlib.md5(self.user.email.encode('utf-8').strip().lower()).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?s=140&d=identicon'.format(email_hash)
 
     @property
     def get_user_lessons(self):

@@ -1,4 +1,3 @@
-{% load url from future %}
 
 <div class="page-header-1 {% if not notice.unread %}text-muted{% endif %}">
   <a href="{% url 'profile_detail' notice.actor %}">{{ notice.actor.profile.get_nick_name }}</a>

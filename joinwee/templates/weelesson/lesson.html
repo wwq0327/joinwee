@@ -1,7 +1,7 @@
 {% extends "weelesson/sub_base.html" %}
+{% load comments %}
 {% load thumbnail %}
 {% load markup %}
-{% load comments %}
 {% load hitcount_tags %}
 {% load weetimesince %}
 
@@ -11,7 +11,7 @@
 <script type="text/javascript">
 var csrf_token = '{{ csrf_token }}';
 $(document).ready(function() {
-    {% get_hit_count_javascript for lesson %}
+    {% insert_hit_count_js for lesson %}
         });
 </script>
 {% endblock %}

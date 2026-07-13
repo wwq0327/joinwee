@@ -2,7 +2,6 @@
 
 {% load thumbnail %}
 {% load markup %}
-{% load pagination_tags %}
 
 {% block title %}所有微课{% endblock %}
 {% block content %}
@@ -26,14 +25,12 @@
   </ul>
   <p></p>
   {% if lessons %}
-    {% autopaginate lessons 12 %}
     <div class="row">
       {% include "weelesson/_lesson_list.html" %}
     </div>
   {% else %}
     <p>暂无微快，快来<a href="/lesson/create/">创建</a>一个吧!</p>
   {% endif %}
-  {% paginate %}
 </div>
 
 {% endblock %}

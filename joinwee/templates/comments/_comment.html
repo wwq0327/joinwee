@@ -1,14 +1,11 @@
 {% load thumbnail %}
-{% load comments %}
 {% load markup %}
 {% load weetimesince %}
 {% load atuser %}
-{% load pagination_tags %}
 
 <div>
 	<h4 class="page-header t_c">共有 <span class="label label-default">{{ comment_count }}</span>条交流记录</h4>
-	{% autopaginate comment_list 10 %}
-	{% for comment in comment_list %}
+		{% for comment in comment_list %}
 
 	<div class="media">
 		{% if comment.user.profile.mugshot %}
@@ -35,5 +32,4 @@
 <hr>
 
 <div class="text-center">
-  {% paginate %}
 </div>

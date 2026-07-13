@@ -1,10 +1,9 @@
 {% extends "topics/sub_base.html" %}
-{% load thumbnail %}
 {% load comments %}
+{% load thumbnail %}
 {% load markup %}
 {% load hitcount_tags %}
 {% load weetimesince %}
-{% load pagination_tags %}
 
 {% block title %}{{ lesson.name|safe }}--讨论区 {% endblock %}
 
@@ -36,7 +35,6 @@
 </table>
 
 {% if topics %}
-{% autopaginate topics 20 %}
 <table class="table table-hover table-condensed">
   <thead>
     <tr>
@@ -60,7 +58,6 @@
 </table>
 
 <div class="text-center">
-  {% paginate %}
 </div>
 
 {% else %}

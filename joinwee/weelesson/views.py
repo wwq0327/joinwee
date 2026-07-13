@@ -89,7 +89,7 @@ def create(request):
     
     lesson = WEELesson.objects.create(name=u'无标题微课', creater=request.user)
 
-    if request.is_ajax():
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         _name = request.POST.get('name', '')
         _materials = request.POST.get('materials', '')
         if _name:
@@ -167,7 +167,7 @@ def edit(request, pk):
     if request.user != lesson.creater:
         return HttpResponseForbidden()
 
-    if request.is_ajax():
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         _name = request.POST.get('name', '')
         _materials = request.POST.get('materials', '')
         if _name:

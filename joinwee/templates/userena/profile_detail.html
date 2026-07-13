@@ -1,9 +1,8 @@
 {% extends 'userena/base_userena.html' %}
+{% load comments %}
 {% load i18n %}
-{% load url from future %}
 {% load markup %}
 {% load thumbnail %}
-{% load comments %}
 
 {% block title %}{% blocktrans with profile.user.username as username %}{{ username }}'s profile.{% endblocktrans %}{% endblock %}
 
