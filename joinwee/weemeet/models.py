@@ -9,8 +9,13 @@ from weelesson.models import WEELesson
 from weemeet.utils import ch_time
 
 def get_sentinel_lesson():
-    user = User.objects.get(pk='-1')
-    return WEELesson.objects.get_or_create(creater=user, name=u"微课已被原作者删除")[0]
+    user, _ = User.objects.get_or_create(
+        username='deleted',
+        defaults={'is_active': False}
+    )
+    return WEELesson.objects.get_or_create(creater=user, defaults={
+        'name': u"微课已被原作者删除"
+    })[0]
 
 class WEEMeet(models.Model):
     '''微聚数据'''
