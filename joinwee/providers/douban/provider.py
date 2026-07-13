@@ -17,6 +17,7 @@ class DoubanProvider(OAuth2Provider):
     id = 'douban'
     name = 'Douban'
     account_class = DoubanAccount
+    oauth2_adapter_class = None  # set by views.py after import
 
     access_token_url = 'https://www.douban.com/service/auth2/token'
     authorize_url = 'https://www.douban.com/service/auth2/auth'

@@ -1,10 +1,8 @@
 import requests
 from allauth.socialaccount.providers.oauth2.views import OAuth2Adapter, OAuth2CallbackView, OAuth2LoginView
-from .provider import DoubanProvider
 
 
 class DoubanOAuth2Adapter(OAuth2Adapter):
-    provider_id = DoubanProvider.id
     access_token_url = 'https://www.douban.com/service/auth2/token'
     authorize_url = 'https://www.douban.com/service/auth2/auth'
     profile_url = 'https://api.douban.com/v2/user/~me'
@@ -15,6 +13,8 @@ class DoubanOAuth2Adapter(OAuth2Adapter):
         extra_data = resp.json()
         return self.get_provider().sociallogin_from_response(request, extra_data)
 
+
+DoubanOAuth2Adapter.provider_id = 'douban'
 
 oauth2_login = OAuth2LoginView.adapter_view(DoubanOAuth2Adapter)
 oauth2_callback = OAuth2CallbackView.adapter_view(DoubanOAuth2Adapter)

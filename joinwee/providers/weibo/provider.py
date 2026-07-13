@@ -17,6 +17,7 @@ class WeiboProvider(OAuth2Provider):
     id = 'weibo'
     name = 'Weibo'
     account_class = WeiboAccount
+    oauth2_adapter_class = None  # set by views.py after import
 
     access_token_url = 'https://api.weibo.com/oauth2/access_token'
     authorize_url = 'https://api.weibo.com/oauth2/authorize'
