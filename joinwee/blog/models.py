@@ -4,6 +4,19 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 
+class BlogComment(models.Model):
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField(u'评论内容', max_length=1000)
+    pub_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['pub_date']
+
+    def __str__(self):
+        return f'{self.user.profile.get_nick_name}: {self.content[:30]}'
+
+
 class Category(models.Model):
     name = models.CharField(u'分类名', max_length=12)
 

@@ -1,5 +1,5 @@
 {% extends "blog/sub_base.html" %}
-{% load markup %}
+{% load markup thumbnail %}
 
 {% block title %}{{ post.title }} - 博客{% endblock %}
 
@@ -7,16 +7,46 @@
 
 {% include "blog/_post.html" %}
 
-<div class="blog-comment">
-  <h4 class="page-header t_c">相关评论</h4>
-<!-- UY BEGIN -->
-<div id="uyan_frame"></div>
-<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=88996"></script>
-<!-- UY END -->
+<hr>
+
+<h4>评论（{{ comments|length }}）</h4>
+
+{% for comment in comments %}
+<div class="media" style="margin-top:10px;">
+  <a class="pull-left" href="{% url 'profile_detail' comment.user.username %}">
+    {% if comment.user.profile.mugshot %}
+      <img src="{{ comment.user.profile.mugshot|thumbnail_url:'com_header' }}">
+    {% else %}
+      <img src="{{ comment.user.profile.get_mugshot_url }}" width="64" height="64">
+    {% endif %}
+  </a>
+  <div class="media-body">
+    <small class="info-border">
+      <a href="{% url 'profile_detail' comment.user.username %}">{{ comment.user.profile.get_nick_name }}</a>
+      发表于 {{ comment.pub_date|date:"Y-m-d H:i" }}
+    </small>
+    <p>{{ comment.content|linebreaks }}</p>
+  </div>
 </div>
+{% empty %}
+<p class="text-muted">暂无评论</p>
+{% endfor %}
+
+{% if user.is_authenticated %}
+<hr>
+<h4>发表评论</h4>
+<form method="post" action="">
+  {% csrf_token %}
+  {{ form.content }}
+  <br>
+  <button type="submit" class="btn btn-primary">发表</button>
+</form>
+{% else %}
+<p class="text-muted"><a href="{% url 'account_login' %}">登录</a>后可以发表评论</p>
+{% endif %}
+
 {% endblock %}
 
 {% block blog_right %}
 {% include "blog/_right.html" %}
 {% endblock %}
-
