@@ -11,6 +11,10 @@ from django.db.models import Q
 from topics.models import Topics
 from topics.forms import TopicsForm
 
+def discuss_index(request):
+    topics = Topics.objects.all()[:50]
+    return render(request, 'topics/all.html', {'topics': topics})
+
 def all(request, pk):
     app = 'weelesson'
     ct = ContentType.objects.get(app_label=app, model=app)# 获取类名
