@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n bootstrap3 %}
 
 {% block title %}{% trans "Email Addresses" %}{% endblock %}
 
@@ -7,9 +7,24 @@
 <div class="row my-top-header">
   <div class="col-lg-offset-2 col-lg-8">
     <h2 class="page-header">{% trans "Email Addresses" %}</h2>
+
+    {% if user.emailaddress_set.all %}
+    <h4>{% trans "Current Email" %}</h4>
+    <table class="table">
+      {% for emailaddress in user.emailaddress_set.all %}
+      <tr>
+        <td>{{ emailaddress.email }}</td>
+        <td>{% if emailaddress.verified %}<span class="text-success">已验证</span>{% else %}<span class="text-warning">未验证</span>{% endif %}</td>
+        <td>{% if emailaddress.primary %}<strong>主要</strong>{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+
+    <h4>{% trans "Add Email" %}</h4>
     <form method="post" action="{% url 'account_email' %}">
       {% csrf_token %}
-      {{ form.as_p }}
+      {% bootstrap_form form %}
       <button type="submit" class="btn btn-primary">{% trans "Add Email" %}</button>
     </form>
   </div>
