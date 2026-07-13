@@ -13,9 +13,12 @@ def get_sentinel_lesson():
         username='deleted',
         defaults={'is_active': False}
     )
-    return WEELesson.objects.get_or_create(creater=user, defaults={
-        'name': u"微课已被原作者删除"
-    })[0]
+    lesson, _ = WEELesson.objects.get_or_create(
+        creater=user,
+        name=u'微课已被原作者删除',
+        defaults={'is_draft': False}
+    )
+    return lesson
 
 class WEEMeet(models.Model):
     '''微聚数据'''
