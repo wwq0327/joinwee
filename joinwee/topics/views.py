@@ -13,7 +13,7 @@ from topics.forms import TopicsForm
 
 def discuss_index(request):
     topics = Topics.objects.all()[:50]
-    return render(request, 'topics/all.html', {'topics': topics})
+    return render(request, 'topics/all.html', {'topics': topics, 'lesson': None})
 
 def all(request, pk):
     app = 'weelesson'

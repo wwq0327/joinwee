@@ -12,12 +12,12 @@ from study.forms import StudyForm
 from weelesson.models import WEELesson
 from fav.models import Fav, Join
 
+
 @login_required
 def create(request, pk):
-    study_all = request.user.study_set.all()
     lesson = get_object_or_404(WEELesson, pk=pk)
-    if study_all:
-        this_lesson_study = [s for s in study_all if s.lesson==lesson]
+    study_all = request.user.study_set.all()
+    this_lesson_study = [s for s in study_all if s.lesson == lesson]
     if request.method == "POST":
         form = StudyForm(request.POST)
         if form.is_valid():
@@ -27,7 +27,7 @@ def create(request, pk):
             o.creater = request.user
             o.save()
 
-            return HttpResponseRedirect(reverse("study.views.detail", args=(o.pk,)))
+            return HttpResponseRedirect(reverse('study_detail', args=(o.pk,)))
     else:
         form = StudyForm()
 
@@ -65,10 +65,9 @@ def detail(request, pk):
     except Join.DoesNotExist:
         is_join = False
 
-    #topics = Topics.objects.for_model(meet.lesson) #话题都转到相应的微课上去
     favs = Fav.objects.for_model(study)
     joins = Join.objects.for_model(study)
-    point = "%.2f" % (float(joins.count()/float(study.number))*100) #取两位小数
+    point = "%.2f" % (float(joins.count()/float(study.number))*100)
     return render(request, "study/detail.html",
                               {"study": study,
                                "is_fav": is_fav,
@@ -94,4 +93,3 @@ def edit(request, pk):
 
     return render(request, 'study/create.html',
             {'form': form,'is_edit': True, 'study': study})
-

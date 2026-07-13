@@ -10,9 +10,9 @@ from django.contrib.contenttypes.models import ContentType
 
 from fav.models import Fav, Join
 
+
 @login_required
 def fav(request, app, pk):
-    #app = 'wee'+str(app)
     ct = ContentType.objects.get(app_label=app, model=app)
     obj = ct.get_object_for_this_type(pk=pk)
     if obj:
@@ -24,24 +24,23 @@ def fav(request, app, pk):
             fav.save()
     else:
         raise Http404
-    #return HttpResponse('')
     return HttpResponseRedirect(obj.get_absolute_url())
 
 @login_required
 def unfav(request, app, pk):
-    #app = 'wee'+str(app)
     ct = ContentType.objects.get(app_label=app, model=app)
     obj = ct.get_object_for_this_type(pk=pk)
     if obj:
-        fav = Fav.objects.get(user=request.user,
-                content_type=ct,
-                object_pk=obj.pk)
-        if fav:
+        try:
+            fav = Fav.objects.get(user=request.user,
+                    content_type=ct,
+                    object_pk=obj.pk)
             fav.delete()
+        except Fav.DoesNotExist:
+            pass
     else:
         raise Http404
 
-    #return HttpResponse('')
     return HttpResponseRedirect(obj.get_absolute_url())
 
 @login_required
@@ -62,18 +61,17 @@ def join(request, app, pk):
 
 @login_required
 def unjoin(request, app, pk):
-    #app = 'wee'+str(app)
     ct = ContentType.objects.get(app_label=app, model=app)
     obj = ct.get_object_for_this_type(pk=pk)
     if obj:
-        join = Join.objects.get(user=request.user,
-                content_type=ct,
-                object_pk=obj.pk)
-        if join:
+        try:
+            join = Join.objects.get(user=request.user,
+                    content_type=ct,
+                    object_pk=obj.pk)
             join.delete()
+        except Join.DoesNotExist:
+            pass
     else:
         raise Http404
 
     return HttpResponseRedirect(obj.get_absolute_url())
-
- 
