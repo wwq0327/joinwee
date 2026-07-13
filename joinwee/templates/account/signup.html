@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n bootstrap3 socialaccount %}
+
+{% block title %}{% trans "Sign Up" %} - WEE{% endblock %}
+
+{% block content %}
+<div class="row my-top-header">
+  <div class="col-lg-offset-2 col-lg-8">
+    <h2 class="page-header">{% trans "Sign Up" %}</h2>
+    <form method="post" action="{% url 'account_signup' %}">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+      {% endif %}
+      <button type="submit" class="btn btn-primary">{% trans "Sign Up" %}</button>
+    </form>
+    <hr>
+    <p><strong>第三方帐号登录</strong></p>
+    <a class="btn btn-default" href="{% provider_login_url 'weibo' %}">微博登录</a>
+    <a class="btn btn-default" href="{% provider_login_url 'douban' %}">豆瓣登录</a>
+    <hr>
+    <p>已有帐号？<a href="{% url 'account_login' %}">马上登录</a></p>
+  </div>
+</div>
+{% endblock %}
