@@ -1,5 +1,5 @@
 {% extends 'userena/base_userena.html' %}
-{% load i18n %}
+{% load i18n socialaccount %}
 
 {% block title %}欢迎登录WEE{% endblock %}
 
@@ -54,8 +54,8 @@
       <strong><small>你还可以用第三方帐号登录</small></strong>
       <div class="extoauth2">
 
-	<a class="icon weibo" href="{% url 'socialauth_begin' 'weibo' %}">微博登录</a>
-	<a class="icon douban" href="{% url 'socialauth_begin' 'douban2' %}">豆瓣登录</a>
+	<a class="icon weibo" href="{% provider_login_url 'weibo' %}">微博登录</a>
+	<a class="icon douban" href="{% provider_login_url 'douban' %}">豆瓣登录</a>
       </div>
 
       <p><small><span class="text-muted">还没有帐号？</span><a href="{% url 'account_signup' %}">马上注册</a></small></p>

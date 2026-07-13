@@ -1,5 +1,5 @@
 {% extends "userena/base_userena.html" %}
-{% load snsname %}
+{% load socialaccount %}
 
 {% block title %}社交帐号关联{% endblock %}
 
@@ -8,26 +8,23 @@
   <div class="col-lg-offset-2 col-lg-8">
     <div class="page-header"><h3>社交帐号</h3></div>
 
-    {%if user.is_authenticated%}
-    <p>你正在使用 <b>{{user.username}}</b> | <b>{{user.email}}</b>登录 </p>
-    {%endif%}
+    {% if user.is_authenticated %}
+    <p>你正在使用 <b>{{ user.username }}</b> | <b>{{ user.email }}</b> 登录</p>
+    {% endif %}
+
     <h5 class="info-border">已关联账号：</h5>
-    {%for name, accounts in social_auth.associated.items%}
-    {% for account in accounts %}
-    {% if account %}
-    <p class="desc">{{account.provider|title|snsname}}<a class="btn btn-default btn-xs" href="{%url 'socialauth_disconnect_individual' account.provider account.id%}">取消关联</a></p>
-    {% endif %}
-    {%endfor %}
-    {%endfor%}
-
-    {% if social_auth.not_associated %}
-    <h5 class="info-border">未关联账号：</h5>
-
-    {% for name in social_auth.not_associated.oauth2 %}
-    <a rel="nofollow" class="text-muted" href="{% url "socialauth_begin" name %}">{{ name|title|snsname }}</a>
+    {% for account in user.socialaccount_set.all %}
+    <p class="desc">
+      {{ account.get_provider.name }}
+      <a class="btn btn-default btn-xs" href="{% url 'socialaccount_connections' %}">取消关联</a>
+    </p>
+    {% empty %}
+    <p class="text-muted">暂未关联任何社交账号</p>
     {% endfor %}
-    {% endif %}
+
+    <h5 class="info-border">关联新账号：</h5>
+    <a class="icon weibo" href="{% provider_login_url 'weibo' process='connect' %}">关联微博</a>
+    <a class="icon douban" href="{% provider_login_url 'douban' process='connect' %}">关联豆瓣</a>
   </div>
 </div>
-
 {% endblock %}

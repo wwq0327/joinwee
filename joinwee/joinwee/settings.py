@@ -115,6 +115,7 @@ INSTALLED_APPS = (
     'topics',
     'fav',
     'blog',
+    'providers',
 )
 
 LOGIN_URL = '/accounts/login/'
@@ -141,6 +142,21 @@ ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
 ACCOUNT_SIGNUP_FORM_CLASS = 'profiles.forms.WeeSignupForm'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
+
+SOCIALACCOUNT_PROVIDERS = {
+    'douban': {
+        'APP': {
+            'client_id': config('DOUBAN_KEY', default=''),
+            'secret': config('DOUBAN_SECRET', default=''),
+        },
+    },
+    'weibo': {
+        'APP': {
+            'client_id': config('WEIBO_KEY', default=''),
+            'secret': config('WEIBO_SECRET', default=''),
+        },
+    },
+}
 USE_HTTPS = False
 
 #pic
@@ -161,11 +177,6 @@ THUMBNAIL_ALIASES = {
 HITCOUNT_KEEP_HIT_ACTIVE = { 'days': 7 }
 HITCOUNT_HITS_PER_IP_LIMIT = 0
 HITCOUNT_EXCLUDE_USER_GROUP = ( 'Editor', )
-
-DOUBAN2_CONSUMER_KEY = config('DOUBAN_KEY', default='')
-DOUBAN2_CONSUMER_SECRET = config('DOUBAN_SECRET', default='')
-WEIBO_CLIENT_KEY = config('WEIBO_KEY', default='')
-WEIBO_CLIENT_SECRET = config('WEIBO_SECRET', default='')
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
