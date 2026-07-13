@@ -171,8 +171,8 @@ $(document).ready(function() {
     <div class="row" style="display:flex; flex-wrap:wrap;">
       {% for study in studies %}
         <div class="col-xs-6 col-md-6" style="margin-bottom:10px; display:flex; flex:0 0 50%; max-width:50%;">
-          <div class="img-thumbnail" style="padding:10px; height:100%;">
-            <p style="margin:0 0 8px 0;">
+          <div class="img-thumbnail" style="padding:10px; height:100%; width:100%; box-sizing:border-box;">
+            <p style="margin:0 0 8px 0; word-break:break-all; overflow:hidden;">
               <a href="{{ study.get_absolute_url }}"><strong>{{ study.creater.profile.get_nick_name }}的研修</strong></a>
               <small class="text-muted">| {{ study.start_time|date:"m/d" }}~{{ study.end_time|date:"m/d" }} ~ 第{{ study.issue }}期</small>
             </p>
