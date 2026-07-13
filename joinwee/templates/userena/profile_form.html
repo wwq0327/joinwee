@@ -1,34 +1,21 @@
-{% extends 'userena/base_userena.html' %}
-{% load i18n %}
+{% extends 'base.html' %}
+{% load i18n bootstrap3 %}
 
-{% block title %}{% trans "Account setup" %}{% endblock %}
-
-{% block content_title %}<h2>{% blocktrans with profile.user.username as username %}Account &raquo; {{ username }}{% endblocktrans %}</h2>{% endblock %}
+{% block title %}{% trans "Edit Profile" %}{% endblock %}
 
 {% block content %}
-
-<div class="my-top-header">
-<form action="" enctype="multipart/form-data" method="post" class="form-horizontal">
-  {% csrf_token %}
-  <fieldset>
-          <legend>{% trans "Edit Profile" %}</legend>
-          {{ from.non_field_errors }}
-          {% for field in form %}
-           {{ field.errors }}
-          <div class="form-group">
-                <label for="id_{{field.name}}" class="col-lg-2 control-label">{{ field.label_tag }}</label>
-                <div class="{% if field.name == 'about_me' %}col-lg-6{% else %}col-lg-3{% endif %}">{{ field }}</div>
-                {% if field.help_text %}
-                  <span class="help-block"><small>( {{ field.help_text|safe }} )</small></span>
-                {% endif %}
-        </div>
-        {% endfor %}
-
-  </fieldset>
+<div class="row my-top-header">
+  <div class="col-lg-offset-2 col-lg-8">
+    <h2 class="page-header">{% trans "Edit Profile" %} - {{ profile.user.username }}</h2>
+    <form action="" enctype="multipart/form-data" method="post" class="form-horizontal">
+      {% csrf_token %}
+      {% bootstrap_form form layout='horizontal' %}
+      <div class="form-group">
         <div class="col-lg-offset-2 col-lg-2">
-                <input type="submit" value="{% trans "Save changes" %}" class="btn btn-primary" />
+          <input type="submit" value="{% trans "Save changes" %}" class="btn btn-primary" />
         </div>
-
-</form>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}
