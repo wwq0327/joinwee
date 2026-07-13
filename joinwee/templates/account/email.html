@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Email Addresses" %}{% endblock %}
+
+{% block content %}
+<div class="row my-top-header">
+  <div class="col-lg-offset-2 col-lg-8">
+    <h2 class="page-header">{% trans "Email Addresses" %}</h2>
+    <form method="post" action="{% url 'account_email' %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">{% trans "Add Email" %}</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
