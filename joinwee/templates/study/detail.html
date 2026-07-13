@@ -76,22 +76,22 @@
                 <tbody>
                   <tr>
                     {% if is_join %}
-                      <td class="td-fav-height"><a class="btn btn-primary btn-sm disabled" role="buttom" href="#">我要参加</a></td> {# 如果是已加入状态，则禁用加入按钮 #}
-                    <td><small><a href="/study/{{ study.id }}/unjoin/">取消</small></a></td>
+                      <td class="td-fav-height"><a class="btn btn-primary btn-sm disabled" role="button" href="#">我要参加</a></td> {# 如果是已加入状态，则禁用加入按钮 #}
+                    <td><small><a href="{% url 'unjoin' study.id %}">取消</small></a></td>
                   {% else %}
                     {% if study.over %}
-                      <td class="td-fav-height"><a class="btn btn-primary btn-sm disabled" role="buttom" href="#">我要参加</a></td>
+                      <td class="td-fav-height"><a class="btn btn-primary btn-sm disabled" role="button" href="#">我要参加</a></td>
                     {% else %}
-                      <td class="td-fav-height"><a class="btn btn-primary btn-sm" href="/study/{{ study.id }}/join/">我要参加</a></td>
+                      <td class="td-fav-height"><a class="btn btn-primary btn-sm" href="{% url 'join' study.id %}">我要参加</a></td>
                     {% endif %}
                   {% endif %}
                   </tr>
                   <tr>
                     {%if is_fav %}
-                      <td class="td-fav-height"><a class="btn btn-primary btn-sm disabled" role="buttom" href="#">我感兴趣</a></td>
-                    <td><a href="/study/{{study.id}}/unfav/"><small>取消</small></a></td>
+                      <td class="td-fav-height"><a class="btn btn-primary btn-sm disabled" role="button" href="#">我感兴趣</a></td>
+                    <td><a href="{% url 'unfav' study.id %}"><small>取消</small></a></td>
                   {% else %}
-                    <td class="td-fav-height"><a class="btn btn-primary btn-sm" role="buttom" href="/study/{{ study.id }}/fav/">我感兴趣</a></td>
+                    <td class="td-fav-height"><a class="btn btn-primary btn-sm" role="button" href="{% url 'fav' study.id %}">我感兴趣</a></td>
                   {% endif %}
                   </tr>
                 </tbody>
@@ -121,7 +121,7 @@
               </a>
 
             {% endif %}
-            <p style="width:64px; overlower: hidden;">
+            <p style="width:64px; overflow: hidden;">
               <a href="{% url 'profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
                 <div class="you-header"><small>{{ fav.user.profile.get_nick_name }}</small></div>
               </a>
@@ -145,9 +145,9 @@
   {% with lesson=study.lesson %}
   <div class="thumbnail">
     <img src="{{ lesson.image |thumbnail_url:'lesson' }}" alt="">
-    <a href="{{ lesson.get_absolute_url }}" title="{{ lesson.name|safe }}""><div class="link-a"></div></a>
+    <a href="{{ lesson.get_absolute_url }}" title="{{ lesson.name|safe }}"><div class="link-a"></div></a>
     <div class="caption">
-      <h5 class="lesson-title"><a href="{{ lesson.get_absolute_url }}" title="{{ lesson.name|safe }}">{{ lesson.name|striptags|safe }}</a></h5>
+      <h5 class="lesson-title"><a href="{{ lesson.get_absolute_url }}" title="{{ lesson.name|safe }}">{{ lesson.name|striptags }}</a></h5>
       <p class="lesson-con">{{ lesson.desc|striptags|slice:":80"|safe}}</p>
       <p class="lesson-info">
         <span>学友：{{ lesson.get_favs|length}}</span>
@@ -178,7 +178,7 @@
             </a>
 
           {% endif %}
-          <p style="width:64px; overlower: hidden;">
+          <p style="width:64px; overflow: hidden;">
             <a href="{% url 'profile_detail' fav.user.username %}" title="{{ fav.user.username }}">
               <div class="you-header"><small>{{ fav.user.profile.get_nick_name }}</small></div>
             </a>

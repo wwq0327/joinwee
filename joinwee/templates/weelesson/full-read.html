@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
-    <meta http-equiv="Content Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -10,7 +10,7 @@
     <title>{{ lesson.name }}--WEE-Beta 用智慧创造好玩有趣的开放学习机会</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="{{ MEDIA_URL }}css/bootstrap.css" rel="stylesheet">
+    <link href="{{ MEDIA_URL }}css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
         <link href="{{ MEDIA_URL }}css/main.css" rel="stylesheet">
@@ -29,7 +29,7 @@
     <div id="wrap" style="background: #fbfbea;">
       <aside class="aside hidden-print">
         <ul class="list-unstyled read-panel">
-          <li><a href="{{ lesson.get_absolute_url }}"" title="微课完整模式"><span class="glyphicon glyphicon-th"></a></span></li>
+          <li><a href="{{ lesson.get_absolute_url }}" title="微课完整模式"><span class="glyphicon glyphicon-th"></a></span></li>
           <li class="hide"><a href="#" title="全屏阅读"><span class="glyphicon glyphicon-fullscreen"></a></span></li>
         </ul>
       </aside>

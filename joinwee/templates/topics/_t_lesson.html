@@ -7,10 +7,10 @@
 {% if lesson %}
 
 <div class="thumbnail">
-  <img src="{{ lesson.image |thumbnail_url:'lesson' }}" alt="">
-  <a href="{{ lesson.get_absolute_url }}" title="{{ lesson.name|safe }}""><div class="link-a"></div></a>
+  <img src="{{ lesson.image |thumbnail_url:'lesson' }}" alt="{{ lesson.name }}">
+  <a href="{{ lesson.get_absolute_url }}" title="{{ lesson.name|safe }}"><div class="link-a"></div></a>
   <div class="caption">
-    <h5 class="lesson-title"><a href="{{ lesson.get_absolute_url }}" title="{{ lesson.name|safe }}">{{ lesson.name|striptags|safe }}</a></h5>
+    <h5 class="lesson-title"><a href="{{ lesson.get_absolute_url }}" title="{{ lesson.name|safe }}">{{ lesson.name|striptags }}</a></h5>
     <p class="lesson-con">{{ lesson.desc|striptags|slice:":80"|safe}}</p>
     <p class="lesson-info">
       <span>学友：{{ lesson.get_favs|length}}</span>
