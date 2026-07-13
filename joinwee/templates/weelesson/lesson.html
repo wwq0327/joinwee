@@ -168,30 +168,29 @@ $(document).ready(function() {
     <strong class="t_c">研修列表</strong>
     <span class="pull-right"><a href="{% url 'study_create' lesson.pk %}" class="btn btn-primary btn-sm">我要创建</a></span></h4>
   {% if lesson.get_studies %}
-    <div class="row">
+    <div class="row" style="display:flex; flex-wrap:wrap;">
       {% for study in studies %}
-        <div class="col-xs-6 col-md-6">
-          <div class="media img-thumbnail" style="width:100%;">
-            <h3><strong>
-                <a href="{{ study.get_absolute_url }}">
-                  {{ study.creater.profile.get_nick_name }}的研修 <small>|{{ study.start_time|date:"m/d" }}~{{ study.end_time|date:"m/d" }} ~ {% if study.issue %}第 {{ study.issue }} 期{% endif %}</small>
-                </a>
-            </strong>
-	    </h3>
-            <a href="{% url 'profile_detail' study.creater.username %}" class="pull-left">
-              {% if study.creater.profile.mugshot %}
-                <img class="media-object" src="{{ study.creater.profile.mugshot|thumbnail_url:'com_header' }}">
-              {% else %}
-                <img src="{{ study.creater.profile.get_mugshot_url }}" width="64" height="64">
-              {% endif %}
-            </a>
-            <div class="media-body">
-              <small>组织人：<a href="{% url 'profile_detail' study.creater.username %}">{{ study.creater.profile.get_nick_name }}</a><br />
-              人数： 召集了 <strong><span class="text-primary">{{ study.get_join|length }}</span></strong> 人 / 需要召集 <span class="text-primary">{{ study.number }}</span> 人<br />
-              </small></p>
+        <div class="col-xs-6 col-md-6" style="margin-bottom:10px;">
+          <div class="img-thumbnail" style="padding:10px; height:100%;">
+            <p style="margin:0 0 8px 0;">
+              <a href="{{ study.get_absolute_url }}"><strong>{{ study.creater.profile.get_nick_name }}的研修</strong></a>
+              <small class="text-muted">| {{ study.start_time|date:"m/d" }}~{{ study.end_time|date:"m/d" }} ~ 第{{ study.issue }}期</small>
+            </p>
+            <div class="media">
+              <a href="{% url 'profile_detail' study.creater.username %}" class="pull-left" style="margin-right:10px;">
+                {% if study.creater.profile.mugshot %}
+                  <img class="media-object" src="{{ study.creater.profile.mugshot|thumbnail_url:'com_header' }}">
+                {% else %}
+                  <img src="{{ study.creater.profile.get_mugshot_url }}" width="64" height="64">
+                {% endif %}
+              </a>
+              <div class="media-body">
+                <small>组织人：<a href="{% url 'profile_detail' study.creater.username %}">{{ study.creater.profile.get_nick_name }}</a><br>
+                召集：<strong class="text-primary">{{ study.get_join|length }}</strong>/{{ study.number }} 人</small>
+              </div>
             </div>
-          </div><!-- end media -->
-        </div><!-- end col -->
+          </div>
+        </div>
       {% endfor %}
     </div><!-- end row -->
   {% else %}
