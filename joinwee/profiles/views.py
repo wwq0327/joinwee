@@ -125,7 +125,7 @@ def new_social_user(request):
                           settings.DEFAULT_FROM_EMAIL,
                           [user.email])
                 
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect(reverse('profile_list'))
     else:
         form = NewSocialUserForm()
 

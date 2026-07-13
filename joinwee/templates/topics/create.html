@@ -3,7 +3,7 @@
 
 {% block title %}{% if is_edit %}编辑讨论{% else %}发起一个讨论{% endif %}{% endblock %}
 
-{% block meet_main %}
+{% block topic_main %}
 <form action="" method="post" class="form-horizontal">
   {% csrf_token %}
   <fieldset>
@@ -22,7 +22,7 @@
 </form>
 {% endblock %}
 
-{% block meet_right %}
+{% block topic_right %}
 {% if is_edit %}
 >回 <a href="{{ m.content_object.get_absolute_url }}">{{ m.content_object.name }}</a>
 {% else %}

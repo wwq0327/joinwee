@@ -2,7 +2,7 @@
 from django import template
 from django.utils.timesince import timesince
 from django.utils import formats
-from django.utils.dateformat import format, time_format
+from django.utils.dateformat import format
 from django.utils import timezone
 
 register = template.Library()

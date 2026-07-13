@@ -27,7 +27,7 @@ class PinYin(object):
                 try:
                     line = f_line.split('    ')
                     self.word_dict[line[0]] = line[1]
-                except:
+                except Exception:
                     line = f_line.split('   ')
                     self.word_dict[line[0]] = line[1]
 

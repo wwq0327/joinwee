@@ -1,15 +1,10 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.shortcuts import render
 
-from django.urls import reverse
-
-from home.models import First
-from home.forms import FirstForm
 from weelesson.models import WEELesson
 from weemeet.models import WEEMeet
 
 def index(request):
-    lessons = WEELesson.objects.filter(is_fine=True, is_draft=False)
+    lessons = WEELesson.objects.filter(is_fine=True, is_draft=False).select_related('creater')
 
     return render(request, 'home/index.html', {'lessons': lessons[:8]})
 
