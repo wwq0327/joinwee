@@ -1,3 +1,26 @@
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    }
+});
+
 $(document).ready(function() {
     $('.col-lg-8 textarea').addClass('form-control');
     $('.col-lg-10 textarea').addClass('form-control');
@@ -186,8 +209,7 @@ $(document).ready(function() {
       //dataType: "json",
       data: {
 	name: draft_name,
-	materials: draft_materials,
-	csrfmiddlewaretoken: '{{ csrf_token }}'
+	materials: draft_materials
 	},
       success: function(msg) {
 	$('#save-msg').removeClass('hide').html(msg).show(300).delay(2000).hide(300);
@@ -214,8 +236,7 @@ $(document).ready(function() {
       //dataType: "json",
       data: {
 	name: draft_name,
-	materials: draft_materials,
-	csrfmiddlewaretoken: '{{ csrf_token }}'
+	materials: draft_materials
 	},
       success: function(msg) {
 
@@ -283,5 +304,3 @@ $(function () {
     return this.href == url;
   }).parent().addClass('active');
 });
-  
-})
