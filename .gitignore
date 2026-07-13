@@ -13,3 +13,4 @@ __pycache__/
 
 settings.py.bak*
 *.sqlite3
+.env

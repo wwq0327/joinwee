@@ -12,9 +12,8 @@ class Study(models.Model):
     creater = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    number = models.IntegerField(u'人数规模', max_length=5)
+    number = models.IntegerField(u'人数规模')
     issue = models.IntegerField(u'期号',
-                                max_length=2,
                                 blank=True,
                                 null=True,
                                 help_text=u"研修期号，如果来研修只做一期，则不必填写")

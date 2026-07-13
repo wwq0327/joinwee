@@ -111,7 +111,7 @@ class WEELesson(models.Model):
 
 class FineLesson(models.Model):
     '''精品微课'''
-    lesson = models.ForeignKey(WEELesson, on_delete=models.CASCADE, unique=True)
+    lesson = models.OneToOneField(WEELesson, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

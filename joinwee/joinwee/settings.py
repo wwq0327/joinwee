@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
-import socket
+from decouple import config
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 path = lambda *a: os.path.join(ROOT, *a)
-
-if socket.gethostname() != 'AY131023174608652af9Z':
-    DEBUG = True
-else:
-    DEBUG = False
 
 ADMINS = (
     ('master', 'master@joinwee.com'),
@@ -18,8 +13,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(ROOT, '..', 'db.sqlite3'),
+        'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
+        'NAME': config('DB_NAME', default=os.path.join(ROOT, '..', 'db.sqlite3')),
+        'USER': config('DB_USER', default=''),
+        'PASSWORD': config('DB_PASSWORD', default=''),
+        'HOST': config('DB_HOST', default=''),
+        'PORT': config('DB_PORT', default=''),
     }
 }
 
@@ -54,7 +53,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-SECRET_KEY = '&bo3e3!)z=iqe61hn!zh@u(*(o4c=p*@0e6q#dl6u5gr7+if(#'
+SECRET_KEY = config('SECRET_KEY')
 
 MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
@@ -124,10 +123,10 @@ LOGIN_REDIRECT_URL = '/'
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-DEFAULT_FROM_EMAIL = 'noreply@joinwee.com'
-EMAIL_HOST = 'smtp.exmail.qq.com'
-EMAIL_HOST_USER = 'noreply@joinwee.com'
-EMAIL_HOST_PASSWORD = 'c26c4dd5a6b61'
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@joinwee.com')
+EMAIL_HOST = config('EMAIL_HOST', default='smtp.exmail.qq.com')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='noreply@joinwee.com')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
@@ -163,39 +162,20 @@ HITCOUNT_KEEP_HIT_ACTIVE = { 'days': 7 }
 HITCOUNT_HITS_PER_IP_LIMIT = 0
 HITCOUNT_EXCLUDE_USER_GROUP = ( 'Editor', )
 
-if socket.gethostname() == 'AY131023174608652af9Z':
-    # douban oauth2 - production
-    DOUBAN2_CONSUMER_KEY = '0fc0b9908b9cd40d2f422cb1a2d67c27'
-    DOUBAN2_CONSUMER_SECRET = 'edde6b053f96a59c'
-    # weibo oauth2 - production
-    WEIBO_CLIENT_KEY = '3185370992'
-    WEIBO_CLIENT_SECRET = '6be046d7fc809140ecc55d9b542da8b5'
-else:
-    # douban oauth2 - dev
-    DOUBAN2_CONSUMER_KEY = '030951b0e4c9d91b091bf512ae5d8b51'
-    DOUBAN2_CONSUMER_SECRET = '39fac0990286d3c9'
-    # weibo oauth2 - dev
-    WEIBO_CLIENT_KEY = '131808974'
-    WEIBO_CLIENT_SECRET = '23b22c057d2ac55d70907b49e18284a3'
+DOUBAN2_CONSUMER_KEY = config('DOUBAN_KEY', default='')
+DOUBAN2_CONSUMER_SECRET = config('DOUBAN_SECRET', default='')
+WEIBO_CLIENT_KEY = config('WEIBO_KEY', default='')
+WEIBO_CLIENT_SECRET = config('WEIBO_SECRET', default='')
 
-# SOCIALACCOUNT_PROVIDERS = {
-#     'douban': {
-#         'APP': {
-#             'client_id': DOUBAN2_CONSUMER_KEY,
-#             'secret': DOUBAN2_CONSUMER_SECRET,
-#             'key': '',
-#         }
-#     },
-#     'weibo': {
-#         'APP': {
-#             'client_id': WEIBO_CLIENT_KEY,
-#             'secret': WEIBO_CLIENT_SECRET,
-#             'key': '',
-#         }
-#     },
-# }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+# Security settings (enable in production)
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
+SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=False, cast=bool)
+CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=False, cast=bool)
+SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=0, cast=int)
+SECURE_CONTENT_TYPE_NOSNIFF = True
 
 LOGGING = {
     'version': 1,

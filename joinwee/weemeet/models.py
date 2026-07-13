@@ -30,7 +30,7 @@ class WEEMeet(models.Model):
             max_length=24,
             help_text=u'活动详细地址')
     cost = models.CharField(u'费用', blank=True, null=True, max_length=12)
-    number = models.IntegerField(u'人数规模', max_length=5,
+    number = models.IntegerField(u'人数规模',
             help_text=u'人数多少，请只填半角数字')
     summary = models.TextField(u'微聚详情',
             blank=True, null=True,
