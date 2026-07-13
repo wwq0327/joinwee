@@ -19,7 +19,7 @@
     {{ profile.user.topics_set.get_lesson_topic|length }}讨论
   </div>
   <div class="profile-about">
-    {% if profile.about_me %}{{ profile.about_me|safe }}
+    {% if profile.about_me %}{{ profile.about_me|linebreaks }}
     {% else %}
     ...
     {% if request.user == profile.user %}
@@ -135,7 +135,7 @@
                 <div class="media pro-list">
 
                   <div class="media-body">
-                    <h3 class="media-heading"><a href="{{ meet.get_absolute_url }}"">{{ meet.start_time|date:"m/d" }} @ {{ meet.city }}</a><span class="badge">{{ meet.get_time }}</span></h3>
+                    <h3 class="media-heading"><a href="{{ meet.get_absolute_url }}">{{ meet.start_time|date:"m/d" }} @ {{ meet.city }}</a><span class="badge">{{ meet.get_time }}</span></h3>
                     <div class="lesson-content">
                       <small>
                         发布时间： {{ meet.created|date:"Y/m/d" }}

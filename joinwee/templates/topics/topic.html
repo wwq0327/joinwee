@@ -18,7 +18,7 @@ var csrf_token = '{{ csrf_token }}';
 </div>
 {% endblock %}
 
-{% block meet_main %}
+{% block topic_main %}
 
 <div class="topic-header">{{ t.title|safe }}</div>
 
@@ -85,7 +85,7 @@ var csrf_token = '{{ csrf_token }}';
 
 {% endblock %}
 
-{% block meet_right %}
+{% block topic_right %}
 {% include "topics/_t_lesson.html" %}
 
 {% if other_topics %}

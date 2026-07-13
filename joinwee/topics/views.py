@@ -12,7 +12,7 @@ from topics.models import Topics, Reply
 from topics.forms import TopicsForm
 
 def discuss_index(request):
-    topics = Topics.objects.all()[:50]
+    topics = Topics.objects.all().select_related('user')[:50]
     return render(request, 'topics/all.html', {'topics': topics, 'lesson': None})
 
 def all(request, pk):
@@ -65,7 +65,7 @@ def edit(request, pk):
             {'form': form, 'm': m, 'is_edit': True})
 
 def topic(request, pk):
-    t = get_object_or_404(Topics, pk=pk)
+    t = get_object_or_404(Topics.objects.select_related('user'), pk=pk)
     lesson = t.content_object
     if lesson:
         other_topics = lesson.get_topics.filter(~Q(pk=pk))
@@ -78,7 +78,7 @@ def topic(request, pk):
             Reply.objects.create(topic=t, user=request.user, content=content)
             return HttpResponseRedirect(reverse('t_topic', args=(pk,)))
 
-    replies = t.replies.all()
+    replies = t.replies.select_related('user').all()
     return render(request, 'topics/topic.html',
             {'t': t,
              'other_topics': other_topics,
@@ -95,7 +95,7 @@ def delete(request, pk):
             lesson_url = t.content_object.get_absolute_url()
         else:
             ## 转到微课首页面
-            lesson_url = '/lesson/'
+            lesson_url = reverse('lesson_index')
             
     if request.user == t.user:
         t.delete()
@@ -110,5 +110,5 @@ def delete_comment(request, pk):
     if t.user != request.user:
         raise Http404
     t.delete()
-    return HttpResponseRedirect('/')
+    return HttpResponseRedirect(reverse('lesson_index'))
 	
