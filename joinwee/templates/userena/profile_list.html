@@ -1,56 +1,26 @@
 {% extends 'userena/base_userena.html' %}
-{% load i18n %}
-{% load thumbnail %}
+{% load i18n thumbnail %}
 
 {% block title %}我们的学友{% endblock %}
 
 {% block content %}
-<div class="row my-top-header">
-{% block content_title %}<h3 class="page-header t_c">我们的学友<!--<small>目前已有 {{ profile_list|length }} 位会员加入了joinwee。</small>--></h3>{% endblock %}
+<div class="row">
+<h3 class="page-header t_c">我们的学友</h3>
 
 {% for profile in profile_list %}
-  <div class="col-xs-1 col-sm-6 col-md-1">
-    {% if fav.user.profile.mugshot %}
-      <a href="{% url 'profile_detail' profile.user.username %}" title="{{ profile.user.username }}">
-        <img src="{{ profile.user.profile.mugshot|thumbnail_url:'com_header' }}">
-      </a>
-    {% else %}
-
-      <a href="{% url 'profile_detail' profile.user.username %}" title="{{ profile.user.username }}">
-        <img src="{{ profile.user.profile.get_mugshot_url }}" width="64" height="64">
-      </a>
-
-    {% endif %}
-      <p style="width:64px; overlower: hidden;">
-        <a href="{% url 'profile_detail' profile.user.username %}" title="{{ profile.user.username }}">
-          <div class="you-header"><small>{{ profile.user.profile.get_nick_name }}</small></div>
-        </a>
-      </p>
+  <div class="col-xs-6 col-sm-3 col-md-2 text-center" style="min-height: 120px;">
+    <a href="{% url 'profile_detail' profile.user.username %}">
+      {% if profile.mugshot %}
+        <img src="{{ profile.mugshot|thumbnail_url:'com_header' }}" class="img-rounded">
+      {% else %}
+        <img src="{{ profile.get_mugshot_url }}" width="64" height="64" class="img-rounded">
+      {% endif %}
+    </a>
+    <p><small><a href="{% url 'profile_detail' profile.user.username %}">{{ profile.get_nick_name }}</a></small></p>
   </div>
+{% empty %}
+  <p class="text-muted">暂无学友</p>
 {% endfor %}
 
 </div>
-
-{% if is_paginated %}
-<div class="row">
-<ul class="pagination">
-
-    {% if page_obj.has_previous %}
-      <li class="disabled"><a href="#">上一页</a></li>
-    {% endif %}
-
-    {% blocktrans with page_obj.number as page and page_obj.paginator.num_pages as num_pages %}
-      <li><span class="current page">{{ page }}</span></li>
-    {% endblocktrans %}
-
-    {% if page_obj.has_next %}
-      <li class="disabled"><a href="#">下一页</a></li>
-    {% endif %}
-
-</ul>
-</div>
-{% endif %}
-
-
-
 {% endblock %}

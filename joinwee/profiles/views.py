@@ -32,6 +32,10 @@ def get_protocol():
     return 'https' if settings.USE_HTTPS else 'http'
 
 
+def profile_list(request):
+    profiles = Profile.objects.select_related('user').all()
+    return render(request, 'userena/profile_list.html', {'profile_list': profiles})
+
 def profile_detail(request, username):
     user = get_object_or_404(User, username=username)
     profile = user.profile
