@@ -11,3 +11,4 @@ django.pid
 .DS_Store
 __pycache__/
 
+settings.py.bak*
