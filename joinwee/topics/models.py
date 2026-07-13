@@ -80,6 +80,19 @@ class Topics(models.Model):
     def get_absolute_url(self):
         return reverse('t_topic', kwargs={'pk': self.pk})
 
+class Reply(models.Model):
+    topic = models.ForeignKey(Topics, on_delete=models.CASCADE, related_name='replies')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField(u'回复内容', max_length=1000)
+    pub_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['pub_date']
+
+    def __str__(self):
+        return f'{self.user.profile.get_nick_name}: {self.content[:30]}'
+
+
 # 当用户发起一个新的讨论时，系统会自动将一条消息发送给所属微课的作者
 def topic_handler(sender, instance, created, **kwargs):
     lesson = instance.content_object

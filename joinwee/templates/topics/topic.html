@@ -1,10 +1,5 @@
 {% extends "topics/sub_base.html" %}
-{% load comments %}
-{% load thumbnail %}
-{% load markup %}
-{% load hitcount_tags %}
-{% load weetimesince %}
-
+{% load comments thumbnail markup hitcount_tags weetimesince %}
 
 {% block title %}{{ t.title|safe }} {% endblock %}
 {% block css %}
@@ -13,15 +8,14 @@
 var csrf_token = '{{ csrf_token }}';
 $(document).ready(function() {
     {% insert_hit_count_js for t %}
-        });
+});
 </script>
 {% endblock %}
 
 {% block wee_header %}
-
 <div class="meet-header">
   <div class="container">
-    《<a href="{{lesson.get_absolute_url }}">{{ lesson.name|safe }}</a>》讨论区
+    《<a href="{{ lesson.get_absolute_url }}">{{ lesson.name|safe }}</a>》讨论区
   </div>
 </div>
 {% endblock %}
@@ -33,8 +27,7 @@ $(document).ready(function() {
 <div class="media">
   {% if t.user.profile.mugshot %}
   <a class="pull-left" href="{% url 'profile_detail' t.user.username %}">
-    <img src="{{t.user.profile.mugshot|thumbnail_url:'com_header'}}">
-
+    <img src="{{ t.user.profile.mugshot|thumbnail_url:'com_header' }}">
   </a>
   {% else %}
   <a class="pull-left" href="{% url 'profile_detail' t.user.username %}">
@@ -42,36 +35,60 @@ $(document).ready(function() {
   </a>
   {% endif %}
   <div class="media-body">
-    <small class="media-heading info-border"><a href="{% url 'profile_detail' t.user.username %}">{{ t.user.profile.get_nick_name }}</a> 发布时间： {{ t.pub_date|weetimesince:"Y-m-d H:i" }}，共有 {% get_hit_count for t %} 人浏览了这个讨论
+    <small class="media-heading info-border">
+      <a href="{% url 'profile_detail' t.user.username %}">{{ t.user.profile.get_nick_name }}</a>
+      发表于 {{ t.pub_date|date:"Y-m-d H:i" }}｜{% get_hit_count for t %} 次浏览
       {% if request.user == t.user %}
       | <a href="{% url 't_edit' t.id %}">编辑</a>
       | <a class="rm" href="{% url 't_delete' t.id %}">删除</a>
       {% endif %}
     </small>
     <div class="lesson-content">{{ t.comment|markdown:"safe" }}</div>
-    <!-- JiaThis Button BEGIN -->
-      <small class="pull-left" style="padding-bottom: 5px;line-height: 16px;">分享到：</small>
-    </div>
-    <!-- JiaThis Button END -->
   </div>
 </div>
 
-{% get_comment_list for topics.topics t.id as comment_list %}
-{% get_comment_count for topics.topics t.id as comment_count %}
+<hr>
 
-{% include 'comments/_comment.html' %}
-<div>
-        <h4 class="page-header t_c">你想说...</h4>
-        <div>{% render_comment_form for topics.topics t.id %}</div>
+<h4>回复（{{ replies|length }}）</h4>
+{% for reply in replies %}
+<div class="media">
+  <a class="pull-left" href="{% url 'profile_detail' reply.user.username %}">
+    {% if reply.user.profile.mugshot %}
+      <img src="{{ reply.user.profile.mugshot|thumbnail_url:'com_header' }}">
+    {% else %}
+      <img src="{{ reply.user.profile.get_mugshot_url }}" height="64" width="64">
+    {% endif %}
+  </a>
+  <div class="media-body">
+    <small class="info-border">
+      <a href="{% url 'profile_detail' reply.user.username %}">{{ reply.user.profile.get_nick_name }}</a>
+      回复于 {{ reply.pub_date|date:"Y-m-d H:i" }}
+    </small>
+    <p>{{ reply.content|linebreaks }}</p>
+  </div>
 </div>
+{% empty %}
+<p class="text-muted">暂无回复，来说两句吧</p>
+{% endfor %}
+
+{% if user.is_authenticated %}
+<hr>
+<h4>发表回复</h4>
+<form method="post" action="">
+  {% csrf_token %}
+  <div class="form-group">
+    <textarea name="content" class="form-control" rows="5" placeholder="写下你的想法..." required></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">发表</button>
+</form>
+{% else %}
+<p class="text-muted"><a href="{% url 'account_login' %}">登录</a>后可以参与讨论</p>
+{% endif %}
 
 {% endblock %}
 
-
 {% block meet_right %}
-
 {% include "topics/_t_lesson.html" %}
-
 
 {% if other_topics %}
 <p></p>
@@ -79,10 +96,8 @@ $(document).ready(function() {
 <p style="width: 257px;">
   <strong class="t_c">本微课其它<span class="badge">{{ other_topics|length }}</span>条讨论</strong>
 </p>
-
 <table class="table table-hover" style="width: 257px;">
   <tbody>
-
   {% for ot in other_topics %}
    <tr>
      <td><a href="{{ ot.get_absolute_url }}"><small>{{ ot.title|safe }}</small></a></td>
@@ -93,20 +108,3 @@ $(document).ready(function() {
 </div>
 {% endif %}
 {% endblock %}
-
-{% block script %}
-
-<script type="text/javascript" >
-var myside = $('.myside').outerHeight(true);
-
-$('#affix-list').affix({
-    offset: {
-        top: myside,
-        bottom: function() {
-            return (this.bottom = $('footer').outerHeight(true))
-        }
-    }
-});
-</script>
-{% endblock %}
-

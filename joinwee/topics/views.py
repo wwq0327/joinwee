@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 
-from topics.models import Topics
+from topics.models import Topics, Reply
 from topics.forms import TopicsForm
 
 def discuss_index(request):
@@ -67,18 +67,23 @@ def edit(request, pk):
 def topic(request, pk):
     t = get_object_or_404(Topics, pk=pk)
     lesson = t.content_object
-    #print lesson
-    ## 判断微课是否存在，如果存在，则显示微课的其它讨论，否则返回None
     if lesson:
         other_topics = lesson.get_topics.filter(~Q(pk=pk))
     else:
         other_topics = None
-    #print other_topics
-    
+
+    if request.method == 'POST' and request.user.is_authenticated:
+        content = request.POST.get('content', '').strip()
+        if content:
+            Reply.objects.create(topic=t, user=request.user, content=content)
+            return HttpResponseRedirect(reverse('t_topic', args=(pk,)))
+
+    replies = t.replies.all()
     return render(request, 'topics/topic.html',
             {'t': t,
              'other_topics': other_topics,
              'lesson': lesson,
+             'replies': replies,
              })
 
 @login_required    
