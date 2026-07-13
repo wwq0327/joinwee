@@ -8,11 +8,9 @@
 {% block title %}{{ lesson.name }}{% endblock %}
 {% block css %}
 <link href="{{ MEDIA_URL }}css/reader.css" rel="stylesheet">
-<script type="text/javascript">
+<script>
 var csrf_token = '{{ csrf_token }}';
-$(document).ready(function() {
-    {% insert_hit_count_js for lesson %}
-        });
+{% insert_hit_count_js for lesson %}
 </script>
 {% endblock %}
 {% block wee_header %}
@@ -350,33 +348,13 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block script %}
-<script type="text/javascript" >
-var myside = $('.myside').outerHeight(true) + 360;
-
-$('#affix-list').affix({
-    offset: {
-        top: myside,
-        bottom: function() {
-            return (this.bottom = $('footer').outerHeight(true))
-        }
-    }
-});
-</script>
-
-<script type="text/javascript">
-
+<script>
 $(function () {
-   $('.navtext a').tooltip('hide');
+  var myside = $('.myside').outerHeight(true) + 360;
+  $('#affix-list').affix({
+    offset: { top: myside, bottom: function() { return $('footer').outerHeight(true); } }
+  });
+  $('.navtext a').tooltip('hide');
 });
-
-
-$('#mytab a[data-toggle="tab"]').click(function (e) {
-   e.preventDefault()
-   $(this).tab('show')
-})
-
 </script>
-<!-- JiaThis Button BEGIN -->
-
-<!-- JiaThis Button END -->
 {% endblock %}
