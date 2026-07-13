@@ -36,8 +36,6 @@ SITE_ID = 1
 
 USE_I18N = True
 
-USE_L10N = True
-
 USE_TZ = True
 
 MEDIA_ROOT = path('../media')
@@ -49,7 +47,7 @@ STATIC_ROOT = path('../static')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    path('../media'),
+    # media 目录已通过 MEDIA_URL + static() 在 urls.py 中提供
 )
 
 STATICFILES_FINDERS = (
@@ -59,7 +57,7 @@ STATICFILES_FINDERS = (
 
 SECRET_KEY = config('SECRET_KEY')
 
-MIDDLEWARE = (
+MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -67,7 +65,7 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-)
+]
 
 ROOT_URLCONF = 'joinwee.urls'
 

@@ -5,14 +5,12 @@ import datetime
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 
 from weelesson.models import WEELesson
 from weemeet.models import WEEMeet
 from weemeet.forms import WEEMeetForm
-from topics.models import Topics
 from fav.models import Fav, Join
 
 def index(request):
@@ -20,14 +18,14 @@ def index(request):
     by = request.GET.get('order', '')
     now = datetime.datetime.now()
     if by == 'pre':
-        meets = WEEMeet.objects.filter(start_time__gt=now) # 开始时间大于现在时间，项目为筹备状态
+        meets = WEEMeet.objects.filter(start_time__gt=now).select_related('creater')
     elif by == 'pass':
-        meets = WEEMeet.objects.filter(end_time__lt=now) # 结束时间小于当前时间，项目为已过状态
+        meets = WEEMeet.objects.filter(end_time__lt=now).select_related('creater')
     elif by == 'doing':
         meets = WEEMeet.objects.filter(start_time__lt=now) \
-                .filter(end_time__gt=now) # 开时时间小于当前时间，结束时间大于当前时间的为进行中的
+                .filter(end_time__gt=now).select_related('creater')
     else:
-        meets = WEEMeet.objects.all()
+        meets = WEEMeet.objects.all().select_related('creater')
 
     return render(request, 'weemeet/index.html',
             {'meets': meets})
@@ -83,7 +81,7 @@ def detail(request, pk):
     #topics = Topics.objects.for_model(meet.lesson) #话题都转到相应的微课上去
     favs = Fav.objects.for_model(meet)
     joins = Join.objects.for_model(meet)
-    point = "%.2f" % (float(joins.count()/float(meet.number))*100) #取两位小数
+    point = "%.2f" % (float((joins.count()/float(meet.number)) if meet.number > 0 else 0)*100)
     return render(request, 'weemeet/detail.html',
             {
                 'meet': meet,
@@ -123,5 +121,5 @@ def delete(request, pk):
     else:
         return HttpResponseForbidden()
 
-    return HttpResponseRedirect('/lesson/')
+    return HttpResponseRedirect(reverse('lesson_index'))
 

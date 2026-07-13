@@ -3,7 +3,6 @@
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 
@@ -67,7 +66,7 @@ def detail(request, pk):
 
     favs = Fav.objects.for_model(study)
     joins = Join.objects.for_model(study)
-    point = "%.2f" % (float(joins.count()/float(study.number))*100)
+    point = "%.2f" % (float((joins.count()/float(study.number)) if study.number > 0 else 0)*100)
     return render(request, "study/detail.html",
                               {"study": study,
                                "is_fav": is_fav,
